@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import User, { type IUserModel } from '../models/user.models'
+import { mailtrapClient, sender } from '../mailtrap/mailtrap.config'
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
 
@@ -37,6 +38,15 @@ const signup = async (req: Request, res: Response) => {
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'strict',
                 maxAge: 7 * 24 * 60 * 60 * 1000
+            })
+
+            const recipients = [{ email: user.email }]
+            mailtrapClient.send({
+                from: sender,
+                to: recipients,
+                subject: 'Verify your email',
+                text: `Your verification code is: ${verificationToken}`,
+                category: 'Email verification'
             })
 
             res.status(201).json({
