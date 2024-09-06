@@ -7,9 +7,9 @@ export interface IUser {
     lastLogin: Date
     isVerified: boolean
     resetPasswordToken: string
-    resetPasswordExpiresAt: string
+    resetPasswordExpiresAt: number
     verificationToken: string
-    verificationTokenExpiresAt: string
+    verificationTokenExpiresAt: number
 }
 
 export interface IUserModel extends IUser, Document {}
@@ -22,9 +22,9 @@ const UserSchema: Schema = new Schema(
         lastLogin: { type: Date, default: Date.now },
         isVerified: { type: Boolean, default: false },
         resetPasswordToken: String,
-        resetPasswordExpiresAt: String,
+        resetPasswordExpiresAt: Number,
         verificationToken: String,
-        verificationTokenExpiresAt: String
+        verificationTokenExpiresAt: Number
     },
     {
         versionKey: false,

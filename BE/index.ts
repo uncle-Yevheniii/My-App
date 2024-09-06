@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { type Response } from 'express'
 import dotenv from 'dotenv'
 import http from 'http'
 
@@ -13,7 +13,7 @@ app.use(express.json())
 
 /** Routes **/
 const prefix = '/api'
-app.use(`${prefix}/auth`, userRouter)
+app.use(`${prefix}/users`, userRouter)
 
 /** Start Server **/
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000
