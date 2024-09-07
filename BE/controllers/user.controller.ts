@@ -1,9 +1,10 @@
-import type { Request, Response } from 'express'
-import bcrypt from 'bcrypt'
-import User, { type IUserModel } from '../models/user.models'
-import { mailtrapClient, sender } from '../mailtrap/mailtrap.config'
 import mongoose from 'mongoose'
-import jwt from 'jsonwebtoken'
+import type { Request, Response } from 'express'
+
+import bcrypt from '../services/bcrypt.service'
+import User from '../models/user.models'
+import jwt from '../services/jwt.service'
+import mailtrap from '../services/mailtrap/email.service'
 
 const signup = async (req: Request, res: Response) => {
     const { email, password, name } = req.body
@@ -13,10 +14,8 @@ const signup = async (req: Request, res: Response) => {
         .then((user) => user && res.status(400).json({ message: 'User already exists' }))
         .catch((error) => res.status(500).json({ error }))
 
-    const salt = bcrypt.genSaltSync(10)
-    const hash = bcrypt.hashSync(password, salt)
-
     const verificationToken = Math.floor(100000 + Math.random() * 900000).toString()
+    const hash = await bcrypt.create(password)
 
     const user = new User({
         _id: new mongoose.Types.ObjectId(),
@@ -28,26 +27,9 @@ const signup = async (req: Request, res: Response) => {
     })
 
     user.save()
-        .then((user) => {
-            const JWT_SECRET = process.env.JWT_SECRET ? process.env.JWT_SECRET : ''
-
-            const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' })
-
-            res.cookie('token', token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
-                maxAge: 7 * 24 * 60 * 60 * 1000
-            })
-
-            const recipients = [{ email: user.email }]
-            mailtrapClient.send({
-                from: sender,
-                to: recipients,
-                subject: 'Verify your email',
-                text: `Your verification code is: ${verificationToken}`,
-                category: 'Email verification'
-            })
+        .then(async (user) => {
+            jwt.create(res, user.id)
+            await mailtrap.sendVerificationEmail(email, verificationToken)
 
             res.status(201).json({
                 success: true,
