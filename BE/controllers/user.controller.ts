@@ -69,6 +69,10 @@ const verify = async (req: Request, res: Response) => {
 }
 
 const login = async (req: Request, res: Response) => {}
-const logout = async (req: Request, res: Response) => {}
+
+const logout = async (req: Request, res: Response) => {
+    res.clearCookie('token')
+    res.status(200).json({ success: true, msg: 'User logged out successfully' })
+}
 
 export default { signup, login, logout, verify }
