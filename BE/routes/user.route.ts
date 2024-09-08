@@ -8,5 +8,5 @@ router.post('/signup', controllers.signup)
 
 router.post('/email-verify', controllers.verify)
 
-router.get('/login', controllers.login)
+router.post('/login', controllers.login)
 router.get('/logout', controllers.logout)

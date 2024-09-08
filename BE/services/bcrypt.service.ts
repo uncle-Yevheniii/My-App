@@ -7,4 +7,6 @@ const create = async (password: string) => {
     return hash
 }
 
-export default { create }
+const compare = async (password: string, hash: string) => await bcrypt.compare(password, hash)
+
+export default { create, compare }

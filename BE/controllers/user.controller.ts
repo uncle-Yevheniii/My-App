@@ -15,7 +15,7 @@ const signup = async (req: Request, res: Response) => {
         .catch((error) => res.status(500).json({ error }))
 
     const verificationToken = Math.floor(100000 + Math.random() * 900000).toString()
-    const hash = await bcrypt.create(String(password))
+    const hash = await bcrypt.create(password)
 
     const user = new User({
         _id: new mongoose.Types.ObjectId(),
@@ -68,7 +68,42 @@ const verify = async (req: Request, res: Response) => {
         .catch((error) => res.status(500).json({ error }))
 }
 
-const login = async (req: Request, res: Response) => {}
+const login = async (req: Request, res: Response) => {
+    const { email, password } = req.body
+    if (!email || !password) return res.status(400).json({ message: 'All fields are required' })
+
+    await User.findOne({ email })
+        .then(async (user) => {
+            if (!user) return res.status(400).json({ message: 'Invalid email or password' })
+
+            if (!user.isVerified) return res.status(400).json({ message: 'Please verify your email' })
+
+            await bcrypt
+                .compare(String(password), user.password)
+                .then((isMatch) => {
+                    if (!isMatch) return res.status(400).json({ message: 'Invalid email or password' })
+                })
+                .catch((error) => res.status(500).json({ error }))
+
+            user.lastLogin = new Date()
+            return user
+                .save()
+                .then((user) => {
+                    jwt.create(res, user.id)
+
+                    res.status(200).json({
+                        success: true,
+                        msg: 'User logged in successfully',
+                        user: {
+                            ...user.toObject(),
+                            password: undefined
+                        }
+                    })
+                })
+                .catch((error) => res.status(500).json({ error }))
+        })
+        .catch((error) => res.status(500).json({ error }))
+}
 
 const logout = async (req: Request, res: Response) => {
     res.clearCookie('token')
