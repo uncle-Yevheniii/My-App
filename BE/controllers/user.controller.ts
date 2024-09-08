@@ -15,7 +15,7 @@ const signup = async (req: Request, res: Response) => {
         .catch((error) => res.status(500).json({ error }))
 
     const verificationToken = Math.floor(100000 + Math.random() * 900000).toString()
-    const hash = await bcrypt.create(password)
+    const hash = await bcrypt.create(String(password))
 
     const user = new User({
         _id: new mongoose.Types.ObjectId(),
@@ -26,7 +26,8 @@ const signup = async (req: Request, res: Response) => {
         verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000
     })
 
-    user.save()
+    return user
+        .save()
         .then(async (user) => {
             jwt.create(res, user.id)
             await mailtrap.sendVerificationEmail(email, verificationToken)
@@ -42,7 +43,32 @@ const signup = async (req: Request, res: Response) => {
         })
         .catch((error) => res.status(500).json({ error }))
 }
+
+const verify = async (req: Request, res: Response) => {
+    const { token } = req.body
+    if (!token) return res.status(400).json({ message: 'All fields are required' }) //edit err msg
+
+    await User.findOne({ verificationToken: token, verificationTokenExpiresAt: { $gt: Date.now() } })
+        .then((user) => {
+            if (!user) return res.status(400).json({ message: 'Invalid or expired verification token' })
+            // if not found user with this token expired
+
+            user.isVerified = true
+            user.verificationToken = undefined
+            user.verificationTokenExpiresAt = undefined
+            return user
+                .save()
+                .then(async (user) => {
+                    await mailtrap.sendWelcomeEmail(user.email, user.name)
+
+                    res.status(200).json({ msg: 'User verified successfully', user })
+                })
+                .catch((error) => res.status(500).json({ error }))
+        })
+        .catch((error) => res.status(500).json({ error }))
+}
+
 const login = async (req: Request, res: Response) => {}
 const logout = async (req: Request, res: Response) => {}
 
-export default { signup, login, logout }
+export default { signup, login, logout, verify }

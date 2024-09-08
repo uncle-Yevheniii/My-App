@@ -6,10 +6,10 @@ export interface IUser {
     name: string
     lastLogin: Date
     isVerified: boolean
-    resetPasswordToken: string
-    resetPasswordExpiresAt: number
-    verificationToken: string
-    verificationTokenExpiresAt: number
+    resetPasswordToken: string | undefined
+    resetPasswordExpiresAt: number | undefined
+    verificationToken: string | undefined
+    verificationTokenExpiresAt: number | undefined
 }
 
 export interface IUserModel extends IUser, Document {}
