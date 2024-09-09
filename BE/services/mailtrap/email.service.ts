@@ -4,7 +4,7 @@ import { Logger } from '../../helpers/logger'
 const sendVerificationEmail = async (email: string, token: string) => {
     const recipients = [{ email }]
 
-    await client
+    return await client
         .send({
             from: sender,
             to: recipients,
@@ -19,7 +19,7 @@ const sendVerificationEmail = async (email: string, token: string) => {
 const sendWelcomeEmail = async (email: string, name: string) => {
     const recipients = [{ email }]
 
-    await client
+    return await client
         .send({
             from: sender,
             to: recipients,
@@ -31,4 +31,22 @@ const sendWelcomeEmail = async (email: string, name: string) => {
         .catch((error) => Logger.error(error))
 }
 
-export default { sendVerificationEmail, sendWelcomeEmail }
+const sendResetPasswordEmail = async (email: string, token: string) => {
+    const recipients = [{ email }]
+
+    //? demo url
+    const url = `http://localhost:3000/reset-password/${token}`
+
+    return await client
+        .send({
+            from: sender,
+            to: recipients,
+            subject: 'Reset your password',
+            text: `Reset your password ${url}`,
+            category: 'email-reset-password'
+        })
+        .then((res) => Logger.info(`Email sent: ${JSON.stringify(res)}`))
+        .catch((error) => Logger.error(error))
+}
+
+export default { sendVerificationEmail, sendWelcomeEmail, sendResetPasswordEmail }
