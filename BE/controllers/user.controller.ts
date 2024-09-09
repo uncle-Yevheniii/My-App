@@ -9,10 +9,10 @@ import mailtrap from '../services/mailtrap/email.service'
 
 const signup = async (req: Request, res: Response) => {
     const { email, password, name } = req.body
-    if (!email || !password || !name) return res.status(400).json({ message: 'All fields are required' })
+    if (!email || !password || !name) return res.status(400).json({ success: false, msg: 'All fields are required' })
 
     await User.findOne({ email })
-        .then((user) => user && res.status(400).json({ message: 'User already exists' }))
+        .then((user) => user && res.status(400).json({ success: false, msg: 'User already exists' }))
         .catch((error) => res.status(500).json({ error }))
 
     const verificationToken = Math.floor(100000 + Math.random() * 900000).toString()
@@ -47,12 +47,12 @@ const signup = async (req: Request, res: Response) => {
 
 const verify = async (req: Request, res: Response) => {
     const { token } = req.body
-    if (!token) return res.status(400).json({ message: 'All fields are required' }) //edit err msg
+    if (!token) return res.status(400).json({ success: false, msg: 'All fields are required' }) //edit err msg
 
     await User.findOne({ verificationToken: token, verificationTokenExpiresAt: { $gt: Date.now() } })
         .then((user) => {
-            if (!user) return res.status(400).json({ message: 'Invalid or expired verification token' })
-            // if not found user with this token expired
+            if (!user) return res.status(400).json({ success: false, msg: 'Invalid or expired verification token' })
+            //! if not found user with this token expired
 
             user.isVerified = true
             user.verificationToken = undefined
@@ -62,7 +62,7 @@ const verify = async (req: Request, res: Response) => {
                 .then(async (user) => {
                     await mailtrap.sendWelcomeEmail(user.email, user.name)
 
-                    res.status(200).json({ msg: 'User verified successfully', user })
+                    res.status(200).json({ success: true, msg: 'User verified successfully', user })
                 })
                 .catch((error) => res.status(500).json({ error }))
         })
@@ -71,18 +71,18 @@ const verify = async (req: Request, res: Response) => {
 
 const login = async (req: Request, res: Response) => {
     const { email, password } = req.body
-    if (!email || !password) return res.status(400).json({ message: 'All fields are required' })
+    if (!email || !password) return res.status(400).json({ success: false, msg: 'All fields are required' })
 
     await User.findOne({ email })
         .then(async (user) => {
-            if (!user) return res.status(400).json({ message: 'Invalid email or password' })
+            if (!user) return res.status(400).json({ success: false, msg: 'Invalid email or password' })
 
-            if (!user.isVerified) return res.status(400).json({ message: 'Please verify your email' })
+            if (!user.isVerified) return res.status(400).json({ success: false, msg: 'Please verify your email' })
 
             await bcrypt
                 .compare(String(password), user.password)
                 .then((isMatch) => {
-                    if (!isMatch) return res.status(400).json({ message: 'Invalid email or password' })
+                    if (!isMatch) return res.status(400).json({ success: false, msg: 'Invalid email or password' })
                 })
                 .catch((error) => res.status(500).json({ error }))
 
@@ -113,12 +113,12 @@ const logout = async (req: Request, res: Response) => {
 
 const forgotPassword = async (req: Request, res: Response) => {
     const { email } = req.body
-    if (!email) return res.status(400).json({ message: 'All fields are required' })
+    if (!email) return res.status(400).json({ success: false, msg: 'All fields are required' })
 
     await User.findOne({ email })
         .then((user) => {
             //! not secure
-            if (!user) return res.status(400).json({ message: 'User not found' })
+            if (!user) return res.status(400).json({ success: false, msg: 'User not found' })
 
             const resetToken = crypto.randomBytes(32).toString('hex')
             const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000
@@ -130,7 +130,7 @@ const forgotPassword = async (req: Request, res: Response) => {
                 .then(async () => {
                     await mailtrap.sendForgotPasswordEmail(user.email, resetToken)
 
-                    res.status(200).json({ msg: 'Reset password token sent to your email' })
+                    res.status(200).json({ success: true, msg: 'Reset password token sent to your email' })
                 })
                 .catch((error) => res.status(500).json({ error }))
         })
@@ -140,11 +140,11 @@ const forgotPassword = async (req: Request, res: Response) => {
 const resetPassword = async (req: Request, res: Response) => {
     const { token } = req.params
     const { password } = req.body
-    if (!token) return res.status(400).json({ message: 'Token or password is required' })
+    if (!token) return res.status(400).json({ success: false, msg: 'Token or password is required' })
 
     await User.findOne({ resetPasswordToken: token, resetPasswordExpiresAt: { $gt: Date.now() } })
         .then(async (user) => {
-            if (!user) return res.status(400).json({ message: 'Invalid or expired token' })
+            if (!user) return res.status(400).json({ success: false, msg: 'Invalid or expired token' })
 
             const hash = await bcrypt.create(password)
             user.password = hash
@@ -156,7 +156,7 @@ const resetPassword = async (req: Request, res: Response) => {
                 .then(async () => {
                     await mailtrap.sendResetPasswordEmail(user.email)
 
-                    res.status(200).json({ msg: 'Reset password successful' })
+                    res.status(200).json({ success: true, msg: 'Reset password successful' })
                 })
                 .catch((error) => res.status(500).json({ error }))
         })
