@@ -13,9 +13,7 @@ export const connectDB = async () => {
     mongoose.Promise = global.Promise
     mongoose
         .connect(MONGO_URI)
-        .then((conn) => {
-            Logger.info(`MongoDB Connected: ${conn.connection.host}`)
-        })
+        .then((conn) => Logger.info(`MongoDB Connected: ${conn.connection.host}`))
         .catch((error) => {
             Logger.error(error)
             process.exit(1)
