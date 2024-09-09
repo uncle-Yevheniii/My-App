@@ -31,7 +31,7 @@ const sendWelcomeEmail = async (email: string, name: string) => {
         .catch((error) => Logger.error(error))
 }
 
-const sendResetPasswordEmail = async (email: string, token: string) => {
+const sendForgotPasswordEmail = async (email: string, token: string) => {
     const recipients = [{ email }]
 
     //? demo url
@@ -41,12 +41,24 @@ const sendResetPasswordEmail = async (email: string, token: string) => {
         .send({
             from: sender,
             to: recipients,
-            subject: 'Reset your password',
-            text: `Reset your password ${url}`,
-            category: 'email-reset-password'
+            subject: 'Forgot your password',
+            text: `Forgot your password ${url}`,
+            category: 'email-forgot-password'
         })
         .then((res) => Logger.info(`Email sent: ${JSON.stringify(res)}`))
         .catch((error) => Logger.error(error))
 }
 
-export default { sendVerificationEmail, sendWelcomeEmail, sendResetPasswordEmail }
+const sendResetPasswordEmail = async (email: string) => {
+    const recipients = [{ email }]
+
+    return await client.send({
+        from: sender,
+        to: recipients,
+        subject: 'Reset your password',
+        text: `Reset your password`,
+        category: 'email-reset-password'
+    })
+}
+
+export default { sendVerificationEmail, sendWelcomeEmail, sendResetPasswordEmail, sendForgotPasswordEmail }
