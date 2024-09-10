@@ -4,6 +4,8 @@ import controllers from '../controllers/user.controller'
 
 export const router = express.Router()
 
+router.get('/check-auth', controllers.checkAuth)
+
 router.post('/signup', controllers.signup)
 router.post('/login', controllers.login)
 router.get('/logout', controllers.logout)

@@ -3,13 +3,14 @@
     "module": "index.ts",
     "type": "module",
     "scripts": {
-        "dev": "bun --watch run ./BE/index.ts",
+        "dev": "bun run --hot ./BE/index.ts",
         "write": "bun prettier . --write && echo 'Done.'",
         "clean": "rm -rf dist && echo 'Done.'"
     },
     "devDependencies": {
         "@types/bcrypt": "^5.0.2",
         "@types/bun": "latest",
+        "@types/cookie-parser": "^1.4.7",
         "@types/crypto-js": "^4.2.2",
         "@types/express": "^4.17.21",
         "@types/jsonwebtoken": "^9.0.6"

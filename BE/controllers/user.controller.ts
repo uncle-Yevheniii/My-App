@@ -30,7 +30,7 @@ const signup = async (req: Request, res: Response) => {
     return user
         .save()
         .then(async (user) => {
-            jwt.create(res, user.id)
+            jwt.create(res, user)
             await mailtrap.sendVerificationEmail(email, verificationToken)
 
             res.status(201).json({
@@ -163,4 +163,26 @@ const resetPassword = async (req: Request, res: Response) => {
         .catch((error) => res.status(500).json({ error }))
 }
 
-export default { signup, login, logout, verify, forgotPassword, resetPassword }
+const checkAuth = async (req: Request, res: Response) => {
+    const token = req.cookies.token
+    if (!token) return res.status(401).json({ success: false, msg: 'Unauthorized - no token provided' })
+
+    const decodedUserId = jwt.verify(token, res)
+
+    return await User.findById(decodedUserId)
+        .then((user) => {
+            if (!user) return res.status(401).json({ success: false, msg: 'Unauthorized - invalid token' })
+
+            res.status(200).json({
+                success: true,
+                msg: 'User authenticated',
+                user: {
+                    ...user.toObject(),
+                    password: undefined
+                }
+            })
+        })
+        .catch((error) => res.status(500).json({ error }))
+}
+
+export default { signup, login, logout, verify, forgotPassword, resetPassword, checkAuth }
