@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
-import { LoginPage, SignUpPage } from './pages'
+import { LoginPage, SignUpPage, EmailVerifyPage } from './pages'
 
 export default function App() {
     return (
@@ -12,6 +12,7 @@ export default function App() {
                 <Route path="/" element={'Home'} />
                 <Route path="/signup" element={<SignUpPage />} />
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/email-verify" element={<EmailVerifyPage />} />
             </Routes>
         </div>
     )
