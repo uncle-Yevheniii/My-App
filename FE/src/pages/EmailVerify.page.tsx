@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react'
-// import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 export default function EmailVerifyPage() {
-    const [OTP, setOTP] = useState<string[]>(Array(length).fill(''))
-    const inputRef = useRef<HTMLInputElement[]>(Array(length).fill(null))
-    // const navigate = useNavigate()
+    const [OTP, setOTP] = useState<string[]>(Array(6).fill(''))
+    const inputRef = useRef<HTMLInputElement[]>(Array(6).fill(null))
+    const navigate = useNavigate()
     const isLoading = false
 
     const handleTextChange = (text: string, index: number) => {
@@ -68,10 +68,14 @@ export default function EmailVerifyPage() {
                             />
                         ))}
                     </div>
+
                     <button
                         type="submit"
                         disabled={isLoading || OTP.some((digit) => !digit)}
-                        className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 disabled:opacity-50"
+                        className="
+                        w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg 
+                        hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 
+                        disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-500 disabled:hover:from-green-500 disabled:hover:to-emerald-600"
                     >
                         {isLoading ? 'Verifying...' : 'Verify Email'}
                     </button>
