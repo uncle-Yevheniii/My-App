@@ -1,4 +1,6 @@
+import { Toaster } from 'react-hot-toast'
 import { Route, Routes } from 'react-router-dom'
+
 import { LoginPage, SignUpPage, EmailVerifyPage } from './pages'
 
 export default function App() {
@@ -14,6 +16,8 @@ export default function App() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/email-verify" element={<EmailVerifyPage />} />
             </Routes>
+
+            <Toaster />
         </div>
     )
 }

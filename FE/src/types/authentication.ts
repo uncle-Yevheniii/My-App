@@ -19,6 +19,7 @@ export interface State {
 }
 
 export interface Action {
-    signup: (email: string, password: string, name: string) => void
+    signup: (email: string, password: string, name: string) => Promise<void>
+    verifyEmail: (token: string) => Promise<void>
     // updateFirstName: (firstName: State['firstName']) => void
 }

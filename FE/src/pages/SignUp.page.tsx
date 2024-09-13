@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Formik, Form, FormikHelpers } from 'formik'
 import { User, Mail, Lock, X, Check, Loader } from 'lucide-react'
 
+import toast from 'react-hot-toast'
+
 import { InputComponent } from '../components'
 import { ISignUpFormValues, SignUpFormState } from '../types/user'
 import { useAuthenticationStore } from '../store/authentication.store'
@@ -15,8 +17,7 @@ export default function SignUpPage() {
     const errorStore = useAuthenticationStore((state) => state.error)
     const loadingStore = useAuthenticationStore((state) => state.isLoading)
 
-    console.log(!errorStore)
-
+    // local state
     const [password, setPassword] = useState<string>('')
     const [errors, setErrors] = useState<Record<string, boolean>>({
         minValueValidation: false,
@@ -40,15 +41,14 @@ export default function SignUpPage() {
     }
 
     // FORMIK submit handler
-    const handleSubmitForm = (values: ISignUpFormValues, action: FormikHelpers<ISignUpFormValues>) => {
-        try {
-            signupStore(values.email, password, values.username) //? password is not form submitted [values.password]
-            navigate('/email-verify')
-        } catch (error) {
-            console.log(error)
-        }
-
-        action.resetForm()
+    const handleSubmitForm = async (values: ISignUpFormValues, action: FormikHelpers<ISignUpFormValues>) => {
+        await signupStore(values.email, password, values.username) //? password is not form submitted [values.password]
+            .then(() => {
+                navigate('/email-verify')
+                toast.success('Created successfully')
+                action.resetForm()
+            })
+            .catch((error) => console.log(error))
     }
 
     return (

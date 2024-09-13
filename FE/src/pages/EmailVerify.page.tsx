@@ -1,11 +1,22 @@
+import { Loader } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import toast from 'react-hot-toast'
+
+import { useAuthenticationStore } from '../store/authentication.store'
+
 export default function EmailVerifyPage() {
+    const navigate = useNavigate()
+
+    // store functions
+    const verifyEmailStore = useAuthenticationStore((state) => state.verifyEmail)
+    const errorStore = useAuthenticationStore((state) => state.error)
+    const loadingStore = useAuthenticationStore((state) => state.isLoading)
+
+    // local state
     const [OTP, setOTP] = useState<string[]>(Array(6).fill(''))
     const inputRef = useRef<HTMLInputElement[]>(Array(6).fill(null))
-    const navigate = useNavigate()
-    const isLoading = false
 
     const handleTextChange = (text: string, index: number) => {
         const newOTP = [...OTP]
@@ -39,10 +50,16 @@ export default function EmailVerifyPage() {
     }
 
     // Handle form submit
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const code = OTP.join('')
-        alert(`Email verified successfully! ${code}`)
+
+        await verifyEmailStore(code)
+            .then(() => {
+                navigate('/')
+                toast.success('Email verified successfully')
+            })
+            .catch((error) => console.log(error))
     }
 
     return (
@@ -69,15 +86,18 @@ export default function EmailVerifyPage() {
                         ))}
                     </div>
 
+                    {/* Error message */}
+                    {errorStore && <p className="text-red-600 text-sm text-center font-bold mb-4">{errorStore}</p>}
+
                     <button
                         type="submit"
-                        disabled={isLoading || OTP.some((digit) => !digit)}
+                        disabled={loadingStore || OTP.some((digit) => !digit)}
                         className="
                         w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg 
                         hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 
                         disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-500 disabled:hover:from-green-500 disabled:hover:to-emerald-600"
                     >
-                        {isLoading ? 'Verifying...' : 'Verify Email'}
+                        {loadingStore ? <Loader className="animate-spin mx-auto" size={24} /> : 'Verify Email'}
                     </button>
                 </form>
             </div>
