@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Mail, Lock } from 'lucide-react'
 
 import { InputComponent } from '../components'
-import { ILoginFormValues, LoginFormState } from '../types/authentication'
+import { ILoginFormValues, LoginFormState } from '../types/user'
 
 export default function SignUpPage() {
     const handleSubmitForm = (values: ILoginFormValues, action: FormikHelpers<ILoginFormValues>) => {

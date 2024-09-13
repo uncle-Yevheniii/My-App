@@ -1,12 +1,22 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Formik, Form, FormikHelpers } from 'formik'
-import { User, Mail, Lock, X, Check } from 'lucide-react'
+import { User, Mail, Lock, X, Check, Loader } from 'lucide-react'
 
 import { InputComponent } from '../components'
-import { ISignUpFormValues, SignUpFormState } from '../types/authentication'
+import { ISignUpFormValues, SignUpFormState } from '../types/user'
+import { useAuthenticationStore } from '../store/authentication.store'
 
 export default function SignUpPage() {
+    const navigate = useNavigate()
+
+    // store functions
+    const signupStore = useAuthenticationStore((state) => state.signup)
+    const errorStore = useAuthenticationStore((state) => state.error)
+    const loadingStore = useAuthenticationStore((state) => state.isLoading)
+
+    console.log(!errorStore)
+
     const [password, setPassword] = useState<string>('')
     const [errors, setErrors] = useState<Record<string, boolean>>({
         minValueValidation: false,
@@ -31,7 +41,13 @@ export default function SignUpPage() {
 
     // FORMIK submit handler
     const handleSubmitForm = (values: ISignUpFormValues, action: FormikHelpers<ISignUpFormValues>) => {
-        console.log(values)
+        try {
+            signupStore(values.email, password, values.username) //? password is not form submitted [values.password]
+            navigate('/email-verify')
+        } catch (error) {
+            console.log(error)
+        }
+
         action.resetForm()
     }
 
@@ -56,6 +72,9 @@ export default function SignUpPage() {
                             onChange={(event) => handlePasswordChange(event.target.value)}
                         />
 
+                        {/* Error message */}
+                        {errorStore && <p className="text-red-600 text-sm text-center font-bold mb-4">{errorStore}</p>}
+
                         {/* Password strength indicator */}
                         <div className="mb-6">
                             {Object.entries(errors).map(([key, value]) => (
@@ -77,7 +96,8 @@ export default function SignUpPage() {
                                 !errors.minValueValidation ||
                                 !errors.numberValidation ||
                                 !errors.capitalLetterValidation ||
-                                !errors.specialCharacterValidation
+                                !errors.specialCharacterValidation ||
+                                loadingStore
                             }
                             type="submit"
                             className="
@@ -87,7 +107,7 @@ export default function SignUpPage() {
                             transition duration-200 ease-linear 
                             disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-500 disabled:hover:from-green-500 disabled:hover:to-emerald-600"
                         >
-                            Create Account
+                            {loadingStore ? <Loader className="animate-spin mx-auto" size={24} /> : 'Sign Up'}
                         </button>
                     </Form>
                 </Formik>

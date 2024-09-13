@@ -1,19 +1,24 @@
-export const LoginFormState = {
-    email: '',
-    password: ''
-}
-
-export const SignUpFormState = {
-    username: '',
-    email: '',
-    password: ''
-}
-
-export interface ILoginFormValues {
+export interface IResponseUser {
     email: string
     password: string
+    name: string
+    lastLogin: Date
+    isVerified: boolean
+    resetPasswordToken: string | undefined
+    resetPasswordExpiresAt: number | undefined
+    verificationToken: string | undefined
+    verificationTokenExpiresAt: number | undefined
 }
 
-export interface ISignUpFormValues extends ILoginFormValues {
-    username: string
+export interface State {
+    user: null | IResponseUser
+    error: null | string
+    isLoading: boolean
+    isAuthenticated: boolean
+    isCheckingAuthentication: boolean
+}
+
+export interface Action {
+    signup: (email: string, password: string, name: string) => void
+    // updateFirstName: (firstName: State['firstName']) => void
 }
