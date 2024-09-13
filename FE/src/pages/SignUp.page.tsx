@@ -5,6 +5,8 @@ import { User, Mail, Lock, X, Check, Loader } from 'lucide-react'
 
 import toast from 'react-hot-toast'
 
+//Qwerty123456_
+
 import { InputComponent } from '../components'
 import { ISignUpFormValues, SignUpFormState } from '../types/user'
 import { useAuthenticationStore } from '../store/authentication.store'
@@ -13,9 +15,7 @@ export default function SignUpPage() {
     const navigate = useNavigate()
 
     // store functions
-    const signupStore = useAuthenticationStore((state) => state.signup)
-    const errorStore = useAuthenticationStore((state) => state.error)
-    const loadingStore = useAuthenticationStore((state) => state.isLoading)
+    const { signup, error, isLoading } = useAuthenticationStore()
 
     // local state
     const [password, setPassword] = useState<string>('')
@@ -41,8 +41,8 @@ export default function SignUpPage() {
     }
 
     // FORMIK submit handler
-    const handleSubmitForm = async (values: ISignUpFormValues, action: FormikHelpers<ISignUpFormValues>) => {
-        await signupStore(values.email, password, values.username) //? password is not form submitted [values.password]
+    const handleSubmitForm = (values: ISignUpFormValues, action: FormikHelpers<ISignUpFormValues>) => {
+        signup(values.email, password, values.username) //? password is not form submitted [values.password]
             .then(() => {
                 navigate('/email-verify')
                 toast.success('Created successfully')
@@ -73,7 +73,7 @@ export default function SignUpPage() {
                         />
 
                         {/* Error message */}
-                        {errorStore && <p className="text-red-600 text-sm text-center font-bold mb-4">{errorStore}</p>}
+                        {error && <p className="text-red-600 text-sm text-center font-bold mb-4">{error}</p>}
 
                         {/* Password strength indicator */}
                         <div className="mb-6">
@@ -97,7 +97,7 @@ export default function SignUpPage() {
                                 !errors.numberValidation ||
                                 !errors.capitalLetterValidation ||
                                 !errors.specialCharacterValidation ||
-                                loadingStore
+                                isLoading
                             }
                             type="submit"
                             className="
@@ -107,7 +107,7 @@ export default function SignUpPage() {
                             transition duration-200 ease-linear 
                             disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-500 disabled:hover:from-green-500 disabled:hover:to-emerald-600"
                         >
-                            {loadingStore ? <Loader className="animate-spin mx-auto" size={24} /> : 'Sign Up'}
+                            {isLoading ? <Loader className="animate-spin mx-auto" size={24} /> : 'Sign Up'}
                         </button>
                     </Form>
                 </Formik>

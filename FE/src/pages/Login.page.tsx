@@ -1,15 +1,24 @@
-import { Formik, Form, FormikHelpers } from 'formik'
 import { Link } from 'react-router-dom'
-import { Mail, Lock } from 'lucide-react'
+import { Mail, Lock, Loader } from 'lucide-react'
+import { Formik, Form, FormikHelpers } from 'formik'
+
+import toast from 'react-hot-toast'
 
 import { InputComponent } from '../components'
 import { ILoginFormValues, LoginFormState } from '../types/user'
+import { useAuthenticationStore } from '../store/authentication.store'
 
 export default function SignUpPage() {
-    const handleSubmitForm = (values: ILoginFormValues, action: FormikHelpers<ILoginFormValues>) => {
-        console.log(values)
+    // store functions
+    const { login, isLoading, error } = useAuthenticationStore()
 
-        action.resetForm()
+    const handleSubmitForm = (values: ILoginFormValues, action: FormikHelpers<ILoginFormValues>) => {
+        login(values.email, values.password)
+            .then(() => {
+                toast.success('Logged in successfully')
+                action.resetForm()
+            })
+            .catch((error) => console.log(error))
     }
 
     return (
@@ -22,7 +31,14 @@ export default function SignUpPage() {
                 <Formik initialValues={LoginFormState} onSubmit={handleSubmitForm}>
                     <Form autoComplete="off">
                         <InputComponent id="email" name="email" type="email" placeholder="Enter your email" icon={Mail} />
-                        <InputComponent id="password" name="password" type="password" placeholder="Enter your password" icon={Lock} />
+                        <InputComponent
+                            id="password"
+                            name="password"
+                            type="password"
+                            placeholder="Enter your password"
+                            icon={Lock}
+                            autoComplete="on"
+                        />
 
                         <div className="flex items-center mb-6">
                             <Link to="/forgot-password" className="text-sm text-green-400 hover:underline">
@@ -30,11 +46,14 @@ export default function SignUpPage() {
                             </Link>
                         </div>
 
+                        {/* Error message */}
+                        {error && <p className="text-red-600 text-sm text-center font-bold mb-4">{error}</p>}
+
                         <button
                             type="submit"
                             className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200  ease-linear"
                         >
-                            Login
+                            {isLoading ? <Loader className="animate-spin mx-auto" size={24} /> : 'Login'}
                         </button>
                     </Form>
                 </Formik>

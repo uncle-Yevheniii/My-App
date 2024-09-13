@@ -7,9 +7,11 @@ axios.defaults.withCredentials = true
 
 export const useAuthenticationStore = create<State & Action>((set) => ({
     user: null,
+    isAuthenticated: false,
+
     error: null,
     isLoading: false,
-    isAuthenticated: false,
+
     isCheckingAuthentication: false,
 
     // signup function
@@ -25,12 +27,39 @@ export const useAuthenticationStore = create<State & Action>((set) => ({
                 set({
                     user: res.data.user,
                     isAuthenticated: true,
-                    isLoading: false
+                    isLoading: false,
+                    error: null
                 })
             )
             .catch((err) => {
                 set({
-                    error: err.response.data.msg || 'Error signing up',
+                    error: err.response?.data.msg || 'Error signing up',
+                    isLoading: false
+                })
+                throw err
+            })
+    },
+
+    // login function
+    login: async (email: string, password: string) => {
+        set({
+            isLoading: true,
+            error: null
+        })
+
+        await axios
+            .post('/login', { email, password })
+            .then((res) =>
+                set({
+                    user: res.data.user,
+                    isAuthenticated: true,
+                    isLoading: false,
+                    error: null
+                })
+            )
+            .catch((err) => {
+                set({
+                    error: err.response?.data.msg || 'Error logging up',
                     isLoading: false
                 })
                 throw err
@@ -60,9 +89,29 @@ export const useAuthenticationStore = create<State & Action>((set) => ({
                 })
                 throw err
             })
-    }
+    },
 
-    // login function
+    // checkAuthentication function
+    checkAuthentication: async () => {
+        await axios
+            .get('/check-auth')
+            .then((res) => {
+                set({
+                    user: res.data.user,
+                    isAuthenticated: true,
+                    isCheckingAuthentication: false
+                })
+            })
+            .catch((err) => {
+                set({
+                    error: null,
+
+                    isAuthenticated: false,
+                    isCheckingAuthentication: false
+                })
+                throw err
+            })
+    }
     // login function
     // login function
     // login function
