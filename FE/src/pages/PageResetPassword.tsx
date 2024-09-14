@@ -58,6 +58,7 @@ export default function ResetPasswordPage() {
                         id="password"
                         name="password"
                         type="password"
+                        autoComplete="false"
                         placeholder="New Password"
                         icon={Lock}
                         value={password}
@@ -68,6 +69,7 @@ export default function ResetPasswordPage() {
                         id="confirmPassword"
                         name="confirmPassword"
                         type="password"
+                        autoComplete="false"
                         placeholder="Confirm New Password"
                         icon={Lock}
                         value={confirmPassword}

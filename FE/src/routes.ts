@@ -4,7 +4,7 @@ export enum Routes {
     SIGNUP = '/signup',
     CHECK_AUTH = '/check-auth',
     DASHBOARD = '/dashboard',
-    EMAIL_VERIFICATION = '/email-verify',
+    EMAIL_VERIFICATION = '/verify-email',
     FORGOT_PASSWORD = '/forgot-password',
     RESET_PASSWORD = '/reset-password/:token'
 }

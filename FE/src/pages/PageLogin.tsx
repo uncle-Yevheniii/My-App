@@ -21,8 +21,6 @@ export default function LoginPage() {
         e.preventDefault()
 
         await login(email, password)
-        // .then(() => navigate('/dashboard'))
-        // .catch((error) => console.log(error))
     }
     return (
         <motion.div
@@ -52,6 +50,7 @@ export default function LoginPage() {
                         id="password"
                         name="password"
                         type="password"
+                        autoComplete="false"
                         placeholder="Enter your Password"
                         icon={Lock}
                         value={password}

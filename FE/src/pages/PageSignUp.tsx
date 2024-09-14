@@ -25,7 +25,9 @@ export default function SignUpPage() {
         e.preventDefault()
 
         await signup(email, password, name)
-            .then(() => navigate('/dashboard'))
+            .then(() => {
+                navigate('/verify-email')
+            })
             .catch((error) => console.log(error))
     }
 
@@ -66,6 +68,7 @@ export default function SignUpPage() {
                         id="password"
                         name="password"
                         type="password"
+                        autoComplete="off"
                         placeholder="Enter your Password"
                         icon={Lock}
                         value={password}
