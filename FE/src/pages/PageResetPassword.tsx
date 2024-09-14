@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import toast from 'react-hot-toast'
 
-import { Input } from '../components'
+import { Input, Title } from '../components'
 import { useAuthStore } from '../store/authStore'
 export default function ResetPasswordPage() {
     //local state
@@ -47,9 +47,8 @@ export default function ResetPasswordPage() {
             className="max-w-md w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden"
         >
             <div className="p-8">
-                <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
-                    Reset Password
-                </h2>
+                <Title className="">Reset Password</Title>
+
                 {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
                 {message && <p className="text-green-500 text-sm mb-4">{message}</p>}
 

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, Loader, Mail } from 'lucide-react'
 
-import { Input } from '../components'
+import { Input, Title } from '../components'
 import { useAuthStore } from '../store/authStore'
 export default function ForgotPasswordPage() {
     //local state
@@ -30,9 +30,7 @@ export default function ForgotPasswordPage() {
         >
             <div className="p-8">
                 {/* Title */}
-                <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
-                    Forgot Password
-                </h2>
+                <Title className="">Forgot Password</Title>
 
                 {!isSubmitted ? (
                     <form onSubmit={handleForgotPassword} autoComplete="off">

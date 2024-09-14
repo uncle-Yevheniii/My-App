@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Loader, Lock, Mail, User } from 'lucide-react'
 
-import { Input, PasswordStrengthMeter } from '../components'
+import { FormFooter, Input, PasswordStrengthMeter, Title } from '../components'
 import { useAuthStore } from '../store/authStore'
 
 export default function SignUpPage() {
@@ -40,9 +40,7 @@ export default function SignUpPage() {
         >
             <div className="p-8">
                 {/* Title */}
-                <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
-                    Create Account
-                </h2>
+                <Title className="">Create account</Title>
 
                 {/* Form */}
                 <form onSubmit={handleSignUp} autoComplete="off">
@@ -94,14 +92,9 @@ export default function SignUpPage() {
             </div>
 
             {/* Footer */}
-            <div className="px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center">
-                <p className="text-sm text-gray-400">
-                    Already have an account?{' '}
-                    <Link to={'/login'} className="text-green-400 hover:underline">
-                        Login
-                    </Link>
-                </p>
-            </div>
+            <FormFooter path="/login" label="Login">
+                Already have an account?
+            </FormFooter>
         </motion.div>
     )
 }
