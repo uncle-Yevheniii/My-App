@@ -1,4 +1,4 @@
-export interface IResponseUser {
+interface IUser {
     email: string
     password: string
     name: string
@@ -9,19 +9,20 @@ export interface IResponseUser {
     verificationToken: string | undefined
     verificationTokenExpiresAt: number | undefined
 }
-
-export interface State {
-    user: null | IResponseUser
+export interface Store {
+    user: IUser | null
+    isAuthenticated: boolean
     error: null | string
     isLoading: boolean
-    isAuthenticated: boolean
-    isCheckingAuthentication: boolean
+    isCheckingAuth: boolean
+    message: null | string
 }
-
 export interface Action {
     signup: (email: string, password: string, name: string) => Promise<void>
     login: (email: string, password: string) => Promise<void>
+    logout: () => Promise<void>
+    checkAuth: () => Promise<void>
     verifyEmail: (token: string) => Promise<void>
-    checkAuthentication: () => Promise<void>
-    // updateFirstName: (firstName: State['firstName']) => void
+    forgotPassword: (email: string) => Promise<void>
+    resetPassword: (token: string, password: string) => Promise<void>
 }
