@@ -57,7 +57,7 @@ export default function EmailVerificationPage() {
 
         await verifyEmail(verificationCode)
             .then(() => {
-                navigate('/')
+                navigate('/dashboard')
                 toast.success('Email verified successfully')
             })
             .catch((error) => console.log(error))

@@ -1,32 +1,20 @@
-import { Toaster } from 'react-hot-toast'
+import { lazy, useEffect } from 'react'
 import { Loader } from 'lucide-react'
+import { Toaster } from 'react-hot-toast'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
-import { Routes as Path } from './routes'
+import Layout from './Layout'
+
 import { useAuthStore } from './store/authStore'
-import { LoginPage, SignUpPage, DashboardPage, ResetPasswordPage, ForgotPasswordPage, EmailVerificationPage } from './pages'
-import { useEffect } from 'react'
+import { ProtectedRoute, RedirectAuthenticatedUser } from './helpers/RouteHelpers'
 
-// protect routes that require authentication
-const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-    const user = useAuthStore((state) => state.user)
-    const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
-
-    if (!isAuthenticated) return <Navigate to="/login" replace />
-    if (!user?.isVerified) return <Navigate to="/verify-email" replace />
-
-    return children
-}
-
-// redirect authenticated users to the home page
-const RedirectAuthenticatedUser = ({ children }: { children: JSX.Element }) => {
-    const user = useAuthStore((state) => state.user)
-    const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
-
-    if (isAuthenticated && user?.isVerified) return <Navigate to="/" replace />
-
-    return children
-}
+const HomePage = lazy(() => import('./pages/PageHome'))
+const LoginPage = lazy(() => import('./pages/PageLogin'))
+const SignUpPage = lazy(() => import('./pages/PageSignUp'))
+const DashboardPage = lazy(() => import('./pages/PageDashboard'))
+const EmailVerificationPage = lazy(() => import('./pages/PageEmailVerification'))
+const ForgotPasswordPage = lazy(() => import('./pages/PageForgotPassword'))
+const ResetPasswordPage = lazy(() => import('./pages/PageResetPassword'))
 
 export default function App() {
     const isCheckingAuth = useAuthStore((state) => state.isCheckingAuth)
@@ -39,19 +27,23 @@ export default function App() {
     if (isCheckingAuth) return <Loader className=" animate-spin mx-auto" size={48} />
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-green-900 to-emerald-900 flex items-center justify-center relative overflow-hidden">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-green-900 to-emerald-900 flex items-center justify-center flex-col relative overflow-hidden">
             <Routes>
-                <Route path={Path.DASHBOARD} element={<ProtectedRoute children={<DashboardPage />} />} />
-                <Route path={Path.LOGIN} element={<RedirectAuthenticatedUser children={<LoginPage />} />} />
-                <Route path={Path.SIGNUP} element={<RedirectAuthenticatedUser children={<SignUpPage />} />} />
+                <Route element={<Layout />}>
+                    <Route path="/" element={<RedirectAuthenticatedUser children={<HomePage />} />} />
 
-                <Route path={Path.EMAIL_VERIFICATION} element={<RedirectAuthenticatedUser children={<EmailVerificationPage />} />} />
+                    <Route path="/login" element={<RedirectAuthenticatedUser children={<LoginPage />} />} />
+                    <Route path="/signup" element={<RedirectAuthenticatedUser children={<SignUpPage />} />} />
 
-                <Route path={Path.FORGOT_PASSWORD} element={<RedirectAuthenticatedUser children={<ForgotPasswordPage />} />} />
-                <Route path={Path.RESET_PASSWORD} element={<RedirectAuthenticatedUser children={<ResetPasswordPage />} />} />
-                <Route />
+                    <Route path="/dashboard" element={<ProtectedRoute children={<DashboardPage />} />} />
 
-                <Route path={'*'} element={<Navigate to={Path.DASHBOARD} replace />} />
+                    <Route path="/verify-email" element={<RedirectAuthenticatedUser children={<EmailVerificationPage />} />} />
+
+                    <Route path="/forgot-password" element={<RedirectAuthenticatedUser children={<ForgotPasswordPage />} />} />
+                    <Route path="/reset-password/:token" element={<RedirectAuthenticatedUser children={<ResetPasswordPage />} />} />
+                </Route>
+
+                <Route path={'*'} element={<Navigate to={'/home'} replace />} />
             </Routes>
 
             <Toaster />
