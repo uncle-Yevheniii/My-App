@@ -1,4 +1,4 @@
-import { Loader } from 'lucide-react'
+import { Loader } from './components'
 import { lazy, useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { Navigate, Route, Routes } from 'react-router-dom'
@@ -24,7 +24,7 @@ export default function App() {
         checkAuth()
     }, [checkAuth])
 
-    if (isCheckingAuth) return <Loader className=" animate-spin mx-auto" size={48} />
+    if (isCheckingAuth) return <Loader />
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-green-900 to-emerald-900 flex items-center justify-center flex-col relative overflow-hidden">
