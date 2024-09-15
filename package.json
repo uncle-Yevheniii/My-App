@@ -4,10 +4,7 @@
     "type": "module",
     "scripts": {
         "dev": "NODE_ENV=development bun run --hot ./BE/index.ts",
-        "start":"NODE_ENV=production bun run ./BE/index.ts",
-        "build": "bun install && cd FE && bun install && bun run build && echo 'Done.'",
-        "write": "bun prettier . --write && echo 'Done.'",
-        "clean": "rm -rf dist && echo 'Done.'"
+        "write": "bun prettier . --write && echo 'Done.'"
     },
     "devDependencies": {
         "@types/bun": "latest",

@@ -1,7 +1,0 @@
-export { default as HomePage } from './PageHome'
-export { default as LoginPage } from './PageLogin'
-export { default as SignUpPage } from './PageSignUp'
-export { default as DashboardPage } from './PageDashboard'
-export { default as ResetPasswordPage } from './PageResetPassword'
-export { default as ForgotPasswordPage } from './PageForgotPassword'
-export { default as EmailVerificationPage } from './PageEmailVerification'
