@@ -12,7 +12,11 @@ export interface IUser {
     verificationTokenExpiresAt: number | undefined
 }
 
-export interface IUserModel extends IUser, Document {}
+export interface IUserModel extends IUser, Document {
+    _id: mongoose.Types.ObjectId
+    createdAt: Date
+    updatedAt: Date
+}
 
 const UserSchema: Schema = new Schema(
     {
