@@ -29,8 +29,8 @@ export interface Action {
     emailVerifyFunc: (token: string) => Promise<void>
     checkAuthFunc: () => Promise<void>
     loginFunc: (email: string, password: string) => Promise<void>
+    logoutFunc: () => Promise<void>
 
-    // logout: () => Promise<void>
     // forgotPassword: (email: string) => Promise<void>
     // resetPassword: (token: string, password: string) => Promise<void>
 }
@@ -99,6 +99,20 @@ export const useAuthenticationStore = create<Store & Action>()(
                         throw error
                     }
                     set({ isError: 'Error signing up', isLoadingFunc: false })
+                    throw error
+                }
+            },
+            logoutFunc: async () => {
+                set({ isLoadingFunc: true, isError: '' })
+                try {
+                    await axios.get(`${API_URL}/logout`)
+                    set({ user: null, isAuthenticated: false, isLoadingFunc: false })
+                } catch (error: unknown) {
+                    if (axios.isAxiosError(error)) {
+                        set({ isError: error.response?.data?.msg, isLoadingFunc: false })
+                        throw error
+                    }
+                    set({ isError: 'Error logging out', isLoadingFunc: false })
                     throw error
                 }
             }
