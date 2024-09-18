@@ -6,10 +6,13 @@ const API_URL = import.meta.env.MODE === 'development' ? 'http://localhost:8080/
 axios.defaults.withCredentials = true
 
 interface IUser {
+    _id: string
     email: string
     password: string
     name: string
-    lastLogin: Date
+    lastLogin: string
+    createdAt: string
+    updatedAt: string
     isVerified: boolean
     resetPasswordToken: string | undefined
     resetPasswordExpiresAt: number | undefined

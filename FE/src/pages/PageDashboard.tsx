@@ -1,16 +1,14 @@
 import axios from 'axios'
 import { useState } from 'react'
 
-import { useAuthenticationStore } from '@/store/authenticationStore'
 import { formatDate } from '@/utils/dateFormate'
+import { useAuthenticationStore } from '@/store/authenticationStore'
 
 export default function DashboardPage() {
     const [errorMessage, setErrorMessage] = useState<string>('')
 
     const user = useAuthenticationStore((state) => state.user)
     const logoutFunc = useAuthenticationStore((state) => state.logoutFunc)
-
-    // const navigate = useNavigate()
 
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault()
@@ -31,9 +29,9 @@ export default function DashboardPage() {
                 <p>User info</p>
                 <p>Name: {user?.name}</p>
                 <p>Email: {user?.email}</p>
-                <p>Last login: {formatDate(user?.lastLogin)}</p>
-                <p>createdAt: {formatDate(user?.createdAt)}</p>
-                <p>updatedAt: {formatDate(user?.updatedAt)}</p>
+                <p>Last login: {formatDate(user?.lastLogin ?? 'isNaN')}</p>
+                <p>createdAt: {formatDate(user?.createdAt ?? 'isNaN')}</p>
+                <p>updatedAt: {formatDate(user?.updatedAt ?? 'isNaN')}</p>
             </div>
 
             {errorMessage && <p>{errorMessage}</p>}
