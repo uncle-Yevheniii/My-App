@@ -2,7 +2,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { Layout } from './Layout'
-import { SignUpPage, LoginPage } from '@/pages'
+import { SignUpPage, LoginPage, EmailVerifyPage } from '@/pages'
 
 export default function App() {
     return (
@@ -12,7 +12,7 @@ export default function App() {
                     <Route index element={<div>AboutProject</div>} />
                     <Route path="/signup" element={<SignUpPage />} />
                     <Route path="/login" element={<LoginPage />} />
-                    <Route path="/email-verify" element={<div>Email verify page</div>} />
+                    <Route path="/email-verify" element={<EmailVerifyPage />} />
 
                     <Route path="/dashboard" element={<div>Dashboard page</div>} />
 
