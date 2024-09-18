@@ -45,7 +45,7 @@ export default function SignUpPage() {
                     id="password"
                     name="password"
                     type="text"
-                    placeholder="Enter your Email"
+                    placeholder="Enter your Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value.trim())}
                 />

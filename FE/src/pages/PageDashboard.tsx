@@ -20,10 +20,9 @@ export default function DashboardPage() {
             if (axios.isAxiosError(err)) {
                 return setErrorMessage(err.response?.data?.msg)
             }
-            return setErrorMessage('Error signing up')
+            return setErrorMessage('Error logging out')
         }
     }
-    console.log(user)
     return (
         <div>
             <h2>Dashboard</h2>

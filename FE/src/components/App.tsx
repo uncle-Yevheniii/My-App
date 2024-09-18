@@ -7,24 +7,27 @@ import { useAuthenticationStore } from '@/store/authenticationStore'
 import { SignUpPage, LoginPage, EmailVerifyPage, DashboardPage, AboutProjectPage } from '@/pages'
 
 export default function App() {
+    const isAuthenticated = useAuthenticationStore((state) => state.isAuthenticated)
     const checkAuthFunc = useAuthenticationStore((state) => state.checkAuthFunc)
-    // const user = useAuthenticationStore((state) => state.user)
-    // console.log(user)
+    const user = useAuthenticationStore((state) => state.user)
+
     useEffect(() => {
         checkAuthFunc()
     }, [checkAuthFunc])
 
     // TODO: Add loader
+    // TODO: Normalize restricted and private routes
+
     return (
         <div>
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<AboutProjectPage />} />
-                    <Route path="/signup" element={<SignUpPage />} />
-                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/signup" element={!user || !isAuthenticated ? <SignUpPage /> : <Navigate to="/dashboard" replace />} />
+                    <Route path="/login" element={!user || !isAuthenticated ? <LoginPage /> : <Navigate to="/dashboard" replace />} />
                     <Route path="/email-verify" element={<EmailVerifyPage />} />
 
-                    <Route path="/dashboard" element={<DashboardPage />} />
+                    <Route path="/dashboard" element={user && isAuthenticated ? <DashboardPage /> : <Navigate to="/login" replace />} />
 
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Route>
