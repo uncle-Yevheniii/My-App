@@ -2,6 +2,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { Layout } from './Layout'
+import { SignUpPage } from '@/pages'
 // import { useAuthenticationStore } from '@/store/authenticationStore'
 // import { SignUpPage, EmailVerifyPage } from '@/pages'
 
@@ -41,7 +42,7 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<div>AboutProject</div>} />
-                    <Route path="/signup" element={<div>Signup page</div>} />
+                    <Route path="/signup" element={<SignUpPage />} />
                     <Route path="/login" element={<div>Login page</div>} />
                     <Route path="/email-verify" element={<div>Email verify page</div>} />
 
