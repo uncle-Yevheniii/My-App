@@ -3,8 +3,8 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { Layout } from './Layout'
 import { RedirectRoute, ProtectRoute } from '@/helpers'
-import { SignUpPage, LoginPage, EmailVerifyPage } from '@/pages'
 import { useAuthenticationStore } from '@/store/authenticationStore'
+import { SignUpPage, LoginPage, EmailVerifyPage, DashboardPage, AboutProjectPage } from '@/pages'
 
 export default function App() {
     const checkAuthFunc = useAuthenticationStore((state) => state.checkAuthFunc)
@@ -18,12 +18,12 @@ export default function App() {
         <div>
             <Routes>
                 <Route path="/" element={<Layout />}>
-                    <Route index element={<div>AboutProject</div>} />
+                    <Route index element={<AboutProjectPage />} />
                     <Route path="/signup" element={<RedirectRoute children={<SignUpPage />} />} />
                     <Route path="/login" element={<RedirectRoute children={<LoginPage />} />} />
                     <Route path="/email-verify" element={<EmailVerifyPage />} />
 
-                    <Route path="/dashboard" element={<ProtectRoute children={<div>Dashboard</div>} />} />
+                    <Route path="/dashboard" element={<ProtectRoute children={<DashboardPage />} />} />
 
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Route>
