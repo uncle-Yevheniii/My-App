@@ -20,7 +20,8 @@ export interface Store {
     user: IUser | null
     isAuthenticated: boolean
     isError: string
-    isLoading: boolean
+    isLoadingFunc: boolean
+    isLoadingCheck: boolean
     message: string | null
 }
 export interface Action {
@@ -40,63 +41,64 @@ export const useAuthenticationStore = create<Store & Action>()(
             user: null,
             isAuthenticated: false,
             isError: '',
-            isLoading: false,
+            isLoadingFunc: false,
+            isLoadingCheck: false,
             message: null,
 
             signupFunc: async (email, password, name) => {
-                set({ isLoading: true, isError: '' })
+                set({ isLoadingFunc: true, isError: '' })
                 try {
                     const response = await axios.post(`${API_URL}/signup`, { email, password, name })
-                    set({ user: response.data.user, isAuthenticated: true, isLoading: false })
+                    set({ user: response.data.user, isAuthenticated: true, isLoadingFunc: false })
                 } catch (error: unknown) {
                     if (axios.isAxiosError(error)) {
-                        set({ isError: error.response?.data?.msg, isLoading: false })
+                        set({ isError: error.response?.data?.msg, isLoadingFunc: false })
                         throw error
                     }
-                    set({ isError: 'Error logging', isLoading: false })
+                    set({ isError: 'Error logging', isLoadingFunc: false })
                     throw error
                 }
             },
             emailVerifyFunc: async (token) => {
-                set({ isLoading: true, isError: '' })
+                set({ isLoadingFunc: true, isError: '' })
                 try {
                     const response = await axios.post(`${API_URL}/email-verify`, { verificationToken: token })
-                    set({ user: response.data.user, isAuthenticated: true, isLoading: false })
+                    set({ user: response.data.user, isAuthenticated: true, isLoadingFunc: false })
                 } catch (error: unknown) {
                     if (axios.isAxiosError(error)) {
-                        set({ isError: error.response?.data?.msg, isLoading: false })
+                        set({ isError: error.response?.data?.msg, isLoadingFunc: false })
                         throw error
                     }
-                    set({ isError: 'Error verifying email', isLoading: false })
+                    set({ isError: 'Error verifying email', isLoadingFunc: false })
                     throw error
                 }
             },
             checkAuthFunc: async () => {
-                set({ isLoading: true, isError: '' })
+                set({ isLoadingCheck: true, isError: '' })
                 try {
                     const response = await axios.get(`${API_URL}/check-auth`)
-                    // if (response.data.msg === 'Init clear cookie') set({ user: null, isAuthenticated: false, isLoading: false })
-                    set({ user: response.data.user, isAuthenticated: true, isLoading: false })
+                    if (response?.data?.msg === 'Init clear cookie') return set({ user: null, isAuthenticated: false, isLoadingCheck: false })
+                    return set({ user: response.data.user, isAuthenticated: true, isLoadingCheck: false })
                 } catch (error: unknown) {
                     if (axios.isAxiosError(error)) {
-                        set({ isError: error.response?.data?.msg, isAuthenticated: false, isLoading: false })
+                        set({ isError: error.response?.data?.msg, isAuthenticated: false, isLoadingCheck: false })
                         throw error
                     }
-                    set({ isError: 'Checking authentication failed', isAuthenticated: false, isLoading: false })
+                    set({ isError: 'Checking authentication failed', isAuthenticated: false, isLoadingCheck: false })
                     throw error
                 }
             },
             loginFunc: async (email, password) => {
-                set({ isLoading: true, isError: '' })
+                set({ isLoadingFunc: true, isError: '' })
                 try {
                     const response = await axios.post(`${API_URL}/login`, { email, password })
-                    set({ user: response.data.user, isAuthenticated: true, isLoading: false })
+                    set({ user: response.data.user, isAuthenticated: true, isLoadingFunc: false })
                 } catch (error: unknown) {
                     if (axios.isAxiosError(error)) {
-                        set({ isError: error.response?.data?.msg, isLoading: false })
+                        set({ isError: error.response?.data?.msg, isLoadingFunc: false })
                         throw error
                     }
-                    set({ isError: 'Error signing up', isLoading: false })
+                    set({ isError: 'Error signing up', isLoadingFunc: false })
                     throw error
                 }
             }

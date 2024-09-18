@@ -2,13 +2,14 @@ import { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { Layout } from './Layout'
-import { RedirectRoute, ProtectRoute } from '@/helpers'
+// import { RedirectRoute, ProtectRoute } from '@/helpers'
 import { useAuthenticationStore } from '@/store/authenticationStore'
 import { SignUpPage, LoginPage, EmailVerifyPage, DashboardPage, AboutProjectPage } from '@/pages'
 
 export default function App() {
     const checkAuthFunc = useAuthenticationStore((state) => state.checkAuthFunc)
-
+    // const user = useAuthenticationStore((state) => state.user)
+    // console.log(user)
     useEffect(() => {
         checkAuthFunc()
     }, [checkAuthFunc])
@@ -19,11 +20,11 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<AboutProjectPage />} />
-                    <Route path="/signup" element={<RedirectRoute children={<SignUpPage />} />} />
-                    <Route path="/login" element={<RedirectRoute children={<LoginPage />} />} />
+                    <Route path="/signup" element={<SignUpPage />} />
+                    <Route path="/login" element={<LoginPage />} />
                     <Route path="/email-verify" element={<EmailVerifyPage />} />
 
-                    <Route path="/dashboard" element={<ProtectRoute children={<DashboardPage />} />} />
+                    <Route path="/dashboard" element={<DashboardPage />} />
 
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Route>

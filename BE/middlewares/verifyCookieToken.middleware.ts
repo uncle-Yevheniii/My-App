@@ -31,7 +31,7 @@ export async function verifyCookieToken(req: Request, res: Response, next: NextF
             const decoded = verifyToken(res, token)
             if (!decoded) return res.status(401).json({ success: false, msg: 'Unauthorized - invalid token' })
             req.body = decoded
-            next()
+            return next()
         }
 
         res.cookie('token', '', {
