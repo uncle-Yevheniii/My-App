@@ -18,7 +18,7 @@ export default function SignUpPage() {
         e.preventDefault()
         try {
             const res = await signupFunc(email, password, name)
-            console.log(res)
+            console.log(res) //! console
             navigate('/email-verify')
         } catch (err: unknown) {
             if (axios.isAxiosError(err)) {
@@ -52,10 +52,10 @@ export default function SignUpPage() {
                 />
                 <input
                     className="border"
-                    id="email"
-                    name="email"
+                    id="password"
+                    name="password"
                     type="text"
-                    placeholder="Enter your Email"
+                    placeholder="Enter your Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value.trim())}
                 />
