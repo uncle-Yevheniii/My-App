@@ -1,19 +1,19 @@
-import { useEffect } from 'react'
+// import { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { Layout } from './Layout'
 // import { RedirectRoute, ProtectRoute } from '@/helpers'
-import { useAuthenticationStore } from '@/store/authenticationStore'
+// import { useAuthenticationStore } from '@/store/authenticationStore'
 import { SignUpPage, LoginPage, EmailVerifyPage, DashboardPage, AboutProjectPage } from '@/pages'
 
 export default function App() {
-    const isAuthenticated = useAuthenticationStore((state) => state.isAuthenticated)
-    const checkAuthFunc = useAuthenticationStore((state) => state.checkAuthFunc)
-    const user = useAuthenticationStore((state) => state.user)
+    // const isAuthenticated = useAuthenticationStore((state) => state.isAuthenticated)
+    // const checkAuthFunc = useAuthenticationStore((state) => state.checkAuthFunc)
+    // const user = useAuthenticationStore((state) => state.user)
 
-    useEffect(() => {
-        checkAuthFunc()
-    }, [checkAuthFunc])
+    // useEffect(() => {
+    //     checkAuthFunc()
+    // }, [checkAuthFunc])
 
     // TODO: Add loader
     // TODO: Normalize restricted and private routes
@@ -23,11 +23,11 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<AboutProjectPage />} />
-                    <Route path="/signup" element={!user || !isAuthenticated ? <SignUpPage /> : <Navigate to="/dashboard" replace />} />
-                    <Route path="/login" element={!user || !isAuthenticated ? <LoginPage /> : <Navigate to="/dashboard" replace />} />
+                    <Route path="/signup" element={<SignUpPage />} />
+                    <Route path="/login" element={<LoginPage />} />
                     <Route path="/email-verify" element={<EmailVerifyPage />} />
 
-                    <Route path="/dashboard" element={user && isAuthenticated ? <DashboardPage /> : <Navigate to="/login" replace />} />
+                    <Route path="/dashboard" element={<DashboardPage />} />
 
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Route>

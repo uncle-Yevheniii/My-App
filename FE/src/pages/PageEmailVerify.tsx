@@ -1,29 +1,29 @@
-import axios from 'axios'
+// import axios from 'axios'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 
-import { useAuthenticationStore } from '@/store/authenticationStore'
+// import { useAuthenticationStore } from '@/store/authenticationStore'
 
 //TODO: need to logic verify email
 export default function EmailVerifyPage() {
     const [token, setToken] = useState<string>('')
-    const [errorMessage, setErrorMessage] = useState<string>('')
+    // const [errorMessage, setErrorMessage] = useState<string>('')
 
-    const emailVerifyFunc = useAuthenticationStore((state) => state.emailVerifyFunc)
+    // const emailVerifyFunc = useAuthenticationStore((state) => state.emailVerifyFunc)
 
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        try {
-            await emailVerifyFunc(token)
-            navigate('/dashboard')
-        } catch (err: unknown) {
-            if (axios.isAxiosError(err)) {
-                return setErrorMessage(err.response?.data?.msg)
-            }
-            return setErrorMessage('Error signing up')
-        }
+        // try {
+        //     await emailVerifyFunc(token)
+        //     navigate('/dashboard')
+        // } catch (err: unknown) {
+        //     if (axios.isAxiosError(err)) {
+        //         return setErrorMessage(err.response?.data?.msg)
+        //     }
+        //     return setErrorMessage('Error signing up')
+        // }
     }
     return (
         <div>
@@ -40,7 +40,7 @@ export default function EmailVerifyPage() {
                     onChange={(e) => setToken(e.target.value.trim())}
                 />
 
-                {errorMessage && <p>{errorMessage}</p>}
+                {/* {errorMessage && <p>{errorMessage}</p>} */}
 
                 <button type="submit">Login</button>
             </form>

@@ -1,30 +1,30 @@
-import axios from 'axios'
+// import axios from 'axios'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 
-import { useAuthenticationStore } from '@/store/authenticationStore'
+// import { useAuthenticationStore } from '@/store/authenticationStore'
 
 export default function SignUpPage() {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
-    const [errorMessage, setErrorMessage] = useState<string>('')
+    // const [errorMessage, setErrorMessage] = useState<string>('')
 
-    const loginFunc = useAuthenticationStore((state) => state.loginFunc)
+    // const loginFunc = useAuthenticationStore((state) => state.loginFunc)
 
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        try {
-            const res = await loginFunc(email, password)
-            console.log(res) //! console
-            navigate('/dashboard')
-        } catch (err: unknown) {
-            if (axios.isAxiosError(err)) {
-                return setErrorMessage(err.response?.data?.msg)
-            }
-            return setErrorMessage('Error signing up')
-        }
+        // try {
+        //     const res = await loginFunc(email, password)
+        //     console.log(res) //! console
+        //     navigate('/dashboard')
+        // } catch (err: unknown) {
+        //     if (axios.isAxiosError(err)) {
+        //         return setErrorMessage(err.response?.data?.msg)
+        //     }
+        //     return setErrorMessage('Error signing up')
+        // }
     }
     return (
         <div>
@@ -50,7 +50,7 @@ export default function SignUpPage() {
                     onChange={(e) => setPassword(e.target.value.trim())}
                 />
 
-                {errorMessage && <p>{errorMessage}</p>}
+                {/* {errorMessage && <p>{errorMessage}</p>} */}
 
                 <button type="submit">Login</button>
             </form>
