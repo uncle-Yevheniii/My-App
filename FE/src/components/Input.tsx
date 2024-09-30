@@ -1,3 +1,5 @@
+import { Field } from 'formik'
+
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
 }
@@ -9,7 +11,7 @@ export default function Input({ icon: Icon, ...props }: InputProps) {
                 <Icon />
             </div>
 
-            <input {...props} />
+            <Field {...props} />
         </div>
     )
 }
