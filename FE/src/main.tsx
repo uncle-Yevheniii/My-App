@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
 
 import App from './components/App.tsx'
-import { store } from './store/store.ts'
+import store from './store/store.ts'
 
 import './index.css'
 

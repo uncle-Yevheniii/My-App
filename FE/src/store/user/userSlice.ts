@@ -1,33 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { userSignUp } from './userOperations'
+import { userSignUp, userLogin } from './userOperations'
 
-interface IUser {
-    success: boolean
-    msg: string
-    user: {
-        _id: string
-        email: string
-        name: string
-        isVerified: boolean
-        verificationToken: string
-        verificationTokenExpiresAt: Date | number
-        lastLogin: string
-        createdAt: string
-        updatedAt: string
-    }
-}
-
-interface IUserState {
-    user: IUser | null
-    isLoading: boolean
-    isError: string
-}
-
-const initialState: IUserState = {
-    user: null,
-    isLoading: false,
-    isError: ''
-}
+import { initialState } from '@/models/IUser'
 
 const userSlice = createSlice({
     name: 'user',
@@ -40,11 +14,24 @@ const userSlice = createSlice({
         })
         builder.addCase(userSignUp.fulfilled, (state, action) => {
             state.isLoading = false
-            console.log(action.payload)
+            console.log(action.payload) //TODO add state
         })
         builder.addCase(userSignUp.rejected, (state, action) => {
             state.isLoading = false
-            state.isError = action.payload as string
+            state.isError = typeof action.payload === 'string' ? action.payload : ''
+        })
+
+        builder.addCase(userLogin.pending, (state) => {
+            state.isError = ''
+            state.isLoading = true
+        })
+        builder.addCase(userLogin.fulfilled, (state, action) => {
+            state.isLoading = false
+            console.log(action.payload) //TODO add state
+        })
+        builder.addCase(userLogin.rejected, (state, action) => {
+            state.isLoading = false
+            state.isError = typeof action.payload === 'string' ? action.payload : ''
         })
     }
 })

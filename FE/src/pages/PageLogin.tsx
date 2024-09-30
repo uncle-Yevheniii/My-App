@@ -1,59 +1,40 @@
-// import axios from 'axios'
-import { useState } from 'react'
-// import { useNavigate } from 'react-router-dom'
+import { Formik, Form } from 'formik'
+import { Mail, Lock, Loader } from 'lucide-react'
 
-// import { useAuthenticationStore } from '@/store/authenticationStore'
+import { Input } from '@/components'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { IFormValue, initialValueLogin } from '@/models/IFormValues'
+import { userLogin } from '@/store/user/userOperations'
 
 export default function SignUpPage() {
-    const [email, setEmail] = useState<string>('')
-    const [password, setPassword] = useState<string>('')
-    // const [errorMessage, setErrorMessage] = useState<string>('')
+    const dispatch = useAppDispatch()
+    const errorMessage = useAppSelector((state) => state.user.isError)
+    const isLoading = useAppSelector((state) => state.user.isLoading)
 
-    // const loginFunc = useAuthenticationStore((state) => state.loginFunc)
-
-    // const navigate = useNavigate()
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        // try {
-        //     const res = await loginFunc(email, password)
-        //     console.log(res) //! console
-        //     navigate('/dashboard')
-        // } catch (err: unknown) {
-        //     if (axios.isAxiosError(err)) {
-        //         return setErrorMessage(err.response?.data?.msg)
-        //     }
-        //     return setErrorMessage('Error signing up')
-        // }
+    const onSubmit = async (values: IFormValue) => {
+        try {
+            dispatch(userLogin(values))
+        } catch (err) {
+            console.log(err)
+        }
     }
+
     return (
         <div>
             <h2>Welcome back</h2>
 
-            <form onSubmit={handleSubmit}>
-                <input
-                    className="border"
-                    id="email"
-                    name="email"
-                    type="text"
-                    placeholder="Enter your Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value.trim())}
-                />
-                <input
-                    className="border"
-                    id="password"
-                    name="password"
-                    type="text"
-                    placeholder="Enter your Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value.trim())}
-                />
+            <Formik initialValues={initialValueLogin} onSubmit={onSubmit}>
+                <Form>
+                    <Input className="border" icon={Mail} id="email" name="email" type="text" placeholder="Enter your Email" />
+                    <Input className="border" icon={Lock} id="password" name="password" type="text" placeholder="Enter your Password" />
 
-                {/* {errorMessage && <p>{errorMessage}</p>} */}
+                    {errorMessage && <div className="error">{errorMessage}</div>}
 
-                <button type="submit">Login</button>
-            </form>
+                    <button type="submit" disabled={isLoading}>
+                        {isLoading ? <Loader className=" animate-spin mx-auto" size={24} /> : 'Login'}
+                    </button>
+                </Form>
+            </Formik>
         </div>
     )
 }
