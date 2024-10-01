@@ -1,49 +1,44 @@
-// import axios from 'axios'
-import { useState } from 'react'
-// import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { RectangleEllipsis, Loader } from 'lucide-react'
+import { Formik, Form, ErrorMessage, FormikHelpers } from 'formik'
 
-// import { useAuthenticationStore } from '@/store/authenticationStore'
+import { Input } from '@/components'
+import { userEmailVerify } from '@/store/user/userOperations'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { schema } from '@/helpers/validation'
 
-//TODO: need to logic verify email
 export default function EmailVerifyPage() {
-    const [token, setToken] = useState<string>('')
-    // const [errorMessage, setErrorMessage] = useState<string>('')
+    const navigate = useNavigate()
+    const dispatch = useAppDispatch()
 
-    // const emailVerifyFunc = useAuthenticationStore((state) => state.emailVerifyFunc)
+    const errorMessage = useAppSelector((state) => state.user.isError)
+    const isLoading = useAppSelector((state) => state.user.isLoading)
 
-    // const navigate = useNavigate()
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        // try {
-        //     await emailVerifyFunc(token)
-        //     navigate('/dashboard')
-        // } catch (err: unknown) {
-        //     if (axios.isAxiosError(err)) {
-        //         return setErrorMessage(err.response?.data?.msg)
-        //     }
-        //     return setErrorMessage('Error signing up')
-        // }
+    const handleSubmit = async (values: { token: string }, { resetForm }: FormikHelpers<{ token: string }>) => {
+        try {
+            dispatch(userEmailVerify(values))
+            navigate('/dashboard')
+        } catch (err) {
+            console.log(err)
+        } finally {
+            resetForm()
+        }
     }
     return (
         <div>
             <h2>Verify Your Email</h2>
+            <Formik initialValues={{ token: '' }} onSubmit={handleSubmit} validationSchema={schema.emailVerify}>
+                <Form>
+                    <Input className="border" id="token" type="text" name="token" placeholder="Enter your token" icon={RectangleEllipsis} />
+                    <ErrorMessage name="token" render={(msg) => <div className="text-red-500">{msg}</div>} />
 
-            <form onSubmit={handleSubmit}>
-                <input
-                    className="border"
-                    id="verify-token"
-                    name="verify-token"
-                    type="text"
-                    placeholder="Enter your Verify token"
-                    value={token}
-                    onChange={(e) => setToken(e.target.value.trim())}
-                />
+                    {errorMessage && <div className="error">{errorMessage}</div>}
 
-                {/* {errorMessage && <p>{errorMessage}</p>} */}
-
-                <button type="submit">Login</button>
-            </form>
+                    <button type="submit" disabled={isLoading}>
+                        {isLoading ? <Loader className=" animate-spin mx-auto" size={24} /> : 'Email verify'}
+                    </button>
+                </Form>
+            </Formik>
         </div>
     )
 }

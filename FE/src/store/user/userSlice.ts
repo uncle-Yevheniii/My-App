@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { userSignUp, userLogin } from './userOperations'
+import { userSignUp, userLogin, userEmailVerify } from './userOperations'
 
 import { initialState } from '@/models/IUser'
 
@@ -30,6 +30,19 @@ const userSlice = createSlice({
             console.log(action.payload) //TODO add state
         })
         builder.addCase(userLogin.rejected, (state, action) => {
+            state.isLoading = false
+            state.isError = typeof action.payload === 'string' ? action.payload : ''
+        })
+
+        builder.addCase(userEmailVerify.pending, (state) => {
+            state.isError = ''
+            state.isLoading = true
+        })
+        builder.addCase(userEmailVerify.fulfilled, (state, action) => {
+            state.isLoading = false
+            console.log(action.payload) //TODO add state
+        })
+        builder.addCase(userEmailVerify.rejected, (state, action) => {
             state.isLoading = false
             state.isError = typeof action.payload === 'string' ? action.payload : ''
         })

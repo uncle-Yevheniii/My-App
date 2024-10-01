@@ -1,21 +1,25 @@
-import { Formik, Form } from 'formik'
 import { Mail, Lock, Loader } from 'lucide-react'
+import { Formik, Form, FormikHelpers, ErrorMessage } from 'formik'
 
 import { Input } from '@/components'
+import { schema } from '@/helpers/validation'
+import { userLogin } from '@/store/user/userOperations'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { IFormValue, initialValueLogin } from '@/models/IFormValues'
-import { userLogin } from '@/store/user/userOperations'
 
 export default function SignUpPage() {
     const dispatch = useAppDispatch()
-    const errorMessage = useAppSelector((state) => state.user.isError)
-    const isLoading = useAppSelector((state) => state.user.isLoading)
 
-    const onSubmit = async (values: IFormValue) => {
+    const isLoading = useAppSelector((state) => state.user.isLoading)
+    const errorMessage = useAppSelector((state) => state.user.isError)
+
+    const handleSubmit = async (values: IFormValue, { resetForm }: FormikHelpers<IFormValue>) => {
         try {
             dispatch(userLogin(values))
         } catch (err) {
             console.log(err)
+        } finally {
+            resetForm()
         }
     }
 
@@ -23,10 +27,13 @@ export default function SignUpPage() {
         <div>
             <h2>Welcome back</h2>
 
-            <Formik initialValues={initialValueLogin} onSubmit={onSubmit}>
+            <Formik initialValues={initialValueLogin} onSubmit={handleSubmit} validationSchema={schema.logIn}>
                 <Form>
-                    <Input className="border" icon={Mail} id="email" name="email" type="text" placeholder="Enter your Email" />
-                    <Input className="border" icon={Lock} id="password" name="password" type="text" placeholder="Enter your Password" />
+                    <Input className="border" id="email" name="email" type="text" placeholder="Enter your Email" icon={Mail} />
+                    <ErrorMessage name="email" render={(msg) => <div className="text-red-500">{msg}</div>} />
+
+                    <Input className="border" id="password" name="password" type="text" placeholder="Enter your Password" icon={Lock} />
+                    <ErrorMessage name="password" render={(msg) => <div className="text-red-500">{msg}</div>} />
 
                     {errorMessage && <div className="error">{errorMessage}</div>}
 
