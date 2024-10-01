@@ -12,8 +12,8 @@ export default function SignUpPage() {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
 
-    const errorMessage = useAppSelector((state) => state.user.isError)
-    const isLoading = useAppSelector((state) => state.user.isLoading)
+    const isLoading = useAppSelector((state) => state.user.isLoadingFetch)
+    const errorMessage = useAppSelector((state) => state.user.isErrorMsgFetch)
 
     const handleSubmit = async (values: IFormValues, { resetForm }: FormikHelpers<IFormValues>) => {
         try {

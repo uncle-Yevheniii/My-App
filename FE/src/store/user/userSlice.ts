@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { userSignUp, userLogin, userEmailVerify } from './userOperations'
+import { userSignUp, userLogin, userEmailVerify, userCheckAuth } from './userOperations'
 
 import { initialState } from '@/models/IUser'
 
@@ -9,45 +9,60 @@ const userSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(userSignUp.pending, (state) => {
-            state.isError = ''
-            state.isLoading = true
+            state.isLoadingFetch = true
+            state.isErrorMsgFetch = ''
         })
         builder.addCase(userSignUp.fulfilled, (state, action) => {
-            state.isLoading = false
+            state.isLoadingFetch = false
             console.log(action.payload) //TODO add state
             state.user = action.payload.user
         })
         builder.addCase(userSignUp.rejected, (state, action) => {
-            state.isLoading = false
-            state.isError = typeof action.payload === 'string' ? action.payload : 'Something went wrong'
+            state.isLoadingFetch = false
+            state.isErrorMsgFetch = typeof action.payload === 'string' ? action.payload : 'Something went wrong'
         })
 
         builder.addCase(userLogin.pending, (state) => {
-            state.isError = ''
-            state.isLoading = true
+            state.isErrorMsgFetch = ''
+            state.isLoadingFetch = true
         })
         builder.addCase(userLogin.fulfilled, (state, action) => {
-            state.isLoading = false
+            state.isLoadingFetch = false
             console.log(action.payload) //TODO add state
             state.user = action.payload.user
+            state.isLogged = true
         })
         builder.addCase(userLogin.rejected, (state, action) => {
-            state.isLoading = false
-            state.isError = typeof action.payload === 'string' ? action.payload : 'Something went wrong'
+            state.isLoadingFetch = false
+            state.isErrorMsgFetch = typeof action.payload === 'string' ? action.payload : 'Something went wrong'
         })
 
         builder.addCase(userEmailVerify.pending, (state) => {
-            state.isError = ''
-            state.isLoading = true
+            state.isErrorMsgFetch = ''
+            state.isLoadingFetch = true
         })
         builder.addCase(userEmailVerify.fulfilled, (state, action) => {
-            state.isLoading = false
+            state.isLoadingFetch = false
             console.log(action.payload) //TODO add state
             state.user = action.payload.user
+            state.isLogged = true
         })
         builder.addCase(userEmailVerify.rejected, (state, action) => {
-            state.isLoading = false
-            state.isError = typeof action.payload === 'string' ? action.payload : 'Something went wrong'
+            state.isLoadingFetch = false
+            state.isErrorMsgFetch = typeof action.payload === 'string' ? action.payload : 'Something went wrong'
+        })
+
+        builder.addCase(userCheckAuth.pending, (state) => {
+            state.isLoadingUser = true
+            state.isErrorMsgFetch = ''
+        })
+        builder.addCase(userCheckAuth.fulfilled, (state, action) => {
+            state.isLoadingUser = false
+            console.table(action.payload)
+        })
+        builder.addCase(userCheckAuth.rejected, (state, action) => {
+            state.isLoadingUser = false
+            console.log(action)
         })
     }
 })

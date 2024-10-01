@@ -11,8 +11,8 @@ export default function EmailVerifyPage() {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
 
-    const errorMessage = useAppSelector((state) => state.user.isError)
-    const isLoading = useAppSelector((state) => state.user.isLoading)
+    const isLoading = useAppSelector((state) => state.user.isLoadingFetch)
+    const errorMessage = useAppSelector((state) => state.user.isErrorMsgFetch)
 
     const handleSubmit = async (values: { token: string }, { resetForm }: FormikHelpers<{ token: string }>) => {
         try {

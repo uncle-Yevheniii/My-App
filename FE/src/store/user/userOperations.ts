@@ -30,7 +30,17 @@ export const userEmailVerify = createAsyncThunk('user/emailVerify', async (data:
         const res = await axios.post(`${BASE_URI}/email-verify`, { verificationToken: data.token })
         return res.data
     } catch (error: unknown) {
-        if (axios.isAxiosError(error)) return rejectWithValue(error.response?.data?.msg)
+        if (axios.isAxiosError(error)) return rejectWithValue(error.response?.data?.msg || 'An error occurred')
+        return rejectWithValue('An unexpected error occurred')
+    }
+})
+
+export const userCheckAuth = createAsyncThunk('user/checkAuth', async (_, { rejectWithValue }) => {
+    try {
+        const res = await axios.get(`${BASE_URI}/check-auth`)
+        return res.data
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) return rejectWithValue(error.response?.data?.msg || 'An error occurred')
         return rejectWithValue('An unexpected error occurred')
     }
 })

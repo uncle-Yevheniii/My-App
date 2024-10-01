@@ -16,13 +16,17 @@ export interface IUser {
 export interface IUserState {
     user: IUser | null
     isLogged: boolean
-    isLoading: boolean
-    isError: string
+    isLoadingUser: boolean
+
+    isLoadingFetch: boolean
+    isErrorMsgFetch: string
 }
 
 export const initialState: IUserState = {
     user: null,
     isLogged: false,
-    isLoading: false,
-    isError: ''
+    isLoadingUser: false,
+
+    isLoadingFetch: false,
+    isErrorMsgFetch: ''
 }
