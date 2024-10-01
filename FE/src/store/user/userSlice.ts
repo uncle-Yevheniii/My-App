@@ -18,7 +18,7 @@ const userSlice = createSlice({
         })
         builder.addCase(userSignUp.rejected, (state, action) => {
             state.isLoading = false
-            state.isError = typeof action.payload === 'string' ? action.payload : ''
+            state.isError = typeof action.payload === 'string' ? action.payload : 'Something went wrong'
         })
 
         builder.addCase(userLogin.pending, (state) => {
@@ -31,7 +31,7 @@ const userSlice = createSlice({
         })
         builder.addCase(userLogin.rejected, (state, action) => {
             state.isLoading = false
-            state.isError = typeof action.payload === 'string' ? action.payload : ''
+            state.isError = typeof action.payload === 'string' ? action.payload : 'Something went wrong'
         })
 
         builder.addCase(userEmailVerify.pending, (state) => {
@@ -44,7 +44,7 @@ const userSlice = createSlice({
         })
         builder.addCase(userEmailVerify.rejected, (state, action) => {
             state.isLoading = false
-            state.isError = typeof action.payload === 'string' ? action.payload : ''
+            state.isError = typeof action.payload === 'string' ? action.payload : 'Something went wrong'
         })
     }
 })

@@ -14,12 +14,13 @@ export default function EmailVerifyPage() {
     const errorMessage = useAppSelector((state) => state.user.isError)
     const isLoading = useAppSelector((state) => state.user.isLoading)
 
-    const handleSubmit = (values: { token: string }, { resetForm }: FormikHelpers<{ token: string }>) => {
+    const handleSubmit = async (values: { token: string }, { resetForm }: FormikHelpers<{ token: string }>) => {
         try {
-            dispatch(userEmailVerify(values))
+            await dispatch(userEmailVerify(values)).unwrap()
             navigate('/dashboard')
-        } catch (err) {
-            console.log(err)
+        } catch (error) {
+            console.error('Email verify error:', error)
+            // TODO Handle error (e.g., show error message console.log(err) or toast
         } finally {
             resetForm()
         }

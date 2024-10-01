@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { Mail, Lock, Loader } from 'lucide-react'
 import { Formik, Form, FormikHelpers, ErrorMessage } from 'formik'
 
@@ -8,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { IFormValue, initialValueLogin } from '@/models/IFormValues'
 
 export default function SignUpPage() {
+    const navigate = useNavigate()
     const dispatch = useAppDispatch()
 
     const isLoading = useAppSelector((state) => state.user.isLoading)
@@ -15,9 +17,11 @@ export default function SignUpPage() {
 
     const handleSubmit = async (values: IFormValue, { resetForm }: FormikHelpers<IFormValue>) => {
         try {
-            dispatch(userLogin(values))
-        } catch (err) {
-            console.log(err)
+            await dispatch(userLogin(values)).unwrap()
+            navigate('/dashboard')
+        } catch (error) {
+            console.error('Login error:', error)
+            // TODO Handle error (e.g., show error message console.log(err) or toast
         } finally {
             resetForm()
         }

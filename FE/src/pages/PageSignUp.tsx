@@ -15,16 +15,18 @@ export default function SignUpPage() {
     const errorMessage = useAppSelector((state) => state.user.isError)
     const isLoading = useAppSelector((state) => state.user.isLoading)
 
-    const handleSubmit = (values: IFormValues, { resetForm }: FormikHelpers<IFormValues>) => {
+    const handleSubmit = async (values: IFormValues, { resetForm }: FormikHelpers<IFormValues>) => {
         try {
-            dispatch(userSignUp(values))
+            await dispatch(userSignUp(values)).unwrap()
             navigate('/email-verify')
-        } catch (err) {
-            console.log(err)
+        } catch (error) {
+            console.error('Sign up error:', error)
+            // TODO Handle error (e.g., show error message to user) or toast
         } finally {
             resetForm()
         }
     }
+
     return (
         <div>
             <h2>Create Account</h2>
