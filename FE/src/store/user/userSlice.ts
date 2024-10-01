@@ -15,6 +15,7 @@ const userSlice = createSlice({
         builder.addCase(userSignUp.fulfilled, (state, action) => {
             state.isLoading = false
             console.log(action.payload) //TODO add state
+            state.user = action.payload.user
         })
         builder.addCase(userSignUp.rejected, (state, action) => {
             state.isLoading = false
@@ -28,6 +29,7 @@ const userSlice = createSlice({
         builder.addCase(userLogin.fulfilled, (state, action) => {
             state.isLoading = false
             console.log(action.payload) //TODO add state
+            state.user = action.payload.user
         })
         builder.addCase(userLogin.rejected, (state, action) => {
             state.isLoading = false
@@ -41,6 +43,7 @@ const userSlice = createSlice({
         builder.addCase(userEmailVerify.fulfilled, (state, action) => {
             state.isLoading = false
             console.log(action.payload) //TODO add state
+            state.user = action.payload.user
         })
         builder.addCase(userEmailVerify.rejected, (state, action) => {
             state.isLoading = false
