@@ -1,8 +1,8 @@
 import { Mail, Lock, Loader } from 'lucide-react'
 import { Formik, Form, FormikHelpers, ErrorMessage } from 'formik'
 
+import { schema } from '@/helpers'
 import { Input } from '@/components'
-import { schema } from '@/helpers/validation'
 import { userLogin } from '@/store/user/userOperations'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { IFormValue, initialValueLogin } from '@/models/IFormValues'

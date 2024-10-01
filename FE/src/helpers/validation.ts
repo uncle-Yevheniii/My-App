@@ -1,6 +1,6 @@
 import * as Yup from 'yup'
 
-export const schema = {
+export default {
     signUp: Yup.object().shape({
         name: Yup.string()
             .min(3, 'Name must be at least 3 characters long')
@@ -28,6 +28,6 @@ export const schema = {
             .required('Password is required!')
     }),
     emailVerify: Yup.object().shape({
-        verificationToken: Yup.string().required('Verification token is required!')
+        token: Yup.string().required('Verification token is required!')
     })
 }

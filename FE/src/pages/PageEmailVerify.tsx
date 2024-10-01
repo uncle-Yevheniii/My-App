@@ -2,10 +2,10 @@ import { useNavigate } from 'react-router-dom'
 import { RectangleEllipsis, Loader } from 'lucide-react'
 import { Formik, Form, ErrorMessage, FormikHelpers } from 'formik'
 
+import { schema } from '@/helpers'
 import { Input } from '@/components'
 import { userEmailVerify } from '@/store/user/userOperations'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
-import { schema } from '@/helpers/validation'
 
 export default function EmailVerifyPage() {
     const navigate = useNavigate()
@@ -14,7 +14,7 @@ export default function EmailVerifyPage() {
     const errorMessage = useAppSelector((state) => state.user.isError)
     const isLoading = useAppSelector((state) => state.user.isLoading)
 
-    const handleSubmit = async (values: { token: string }, { resetForm }: FormikHelpers<{ token: string }>) => {
+    const handleSubmit = (values: { token: string }, { resetForm }: FormikHelpers<{ token: string }>) => {
         try {
             dispatch(userEmailVerify(values))
             navigate('/dashboard')

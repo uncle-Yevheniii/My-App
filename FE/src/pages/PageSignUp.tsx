@@ -2,11 +2,11 @@ import { useNavigate } from 'react-router-dom'
 import { Mail, Lock, User, Loader } from 'lucide-react'
 import { Formik, Form, FormikHelpers, ErrorMessage } from 'formik'
 
+import { schema } from '@/helpers'
 import { Input } from '@/components'
 import { userSignUp } from '@/store/user/userOperations'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { IFormValues, initialValueSignUp } from '@/models/IFormValues'
-import { schema } from '@/helpers/validation'
 
 export default function SignUpPage() {
     const navigate = useNavigate()
@@ -15,7 +15,7 @@ export default function SignUpPage() {
     const errorMessage = useAppSelector((state) => state.user.isError)
     const isLoading = useAppSelector((state) => state.user.isLoading)
 
-    const handleSubmit = async (values: IFormValues, { resetForm }: FormikHelpers<IFormValues>) => {
+    const handleSubmit = (values: IFormValues, { resetForm }: FormikHelpers<IFormValues>) => {
         try {
             dispatch(userSignUp(values))
             navigate('/email-verify')
