@@ -1,14 +1,30 @@
+import { useAppSelector } from '@/store/hooks'
 import { NavLink, Outlet } from 'react-router-dom'
-// import { useAuthenticationStore } from '@/store/authenticationStore'
+
+function AuthenticatedNavBar() {
+    return (
+        <>
+            <NavLink to="/dashboard">Dashboard</NavLink>
+        </>
+    )
+}
+function NotAuthenticatedNavBar() {
+    return (
+        <>
+            <NavLink to="/login">Login</NavLink>
+            <NavLink to="/signup">SignUp</NavLink>
+        </>
+    )
+}
 
 export function Layout() {
-    // const isAuthenticated = useAuthenticationStore((state) => state.isAuthenticated)
+    const user = useAppSelector((state) => state.user.userInfo)
+    const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated)
 
     return (
         <header>
             <NavLink to="/">About project</NavLink>
-            <NavLink to="/signup">SignUp</NavLink>
-            <NavLink to="/login">Login</NavLink>
+            {isAuthenticated && user?.isVerified ? <AuthenticatedNavBar /> : <NotAuthenticatedNavBar />}
 
             <Outlet />
         </header>
