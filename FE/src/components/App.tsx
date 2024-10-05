@@ -29,10 +29,13 @@ function ProtectRoute({ children }: { children: JSX.Element }) {
 
 export default function App() {
     const dispatch = useAppDispatch()
+    const isLoadingUser = useAppSelector((state) => state.user.isLoadingUser)
 
     useEffect(() => {
         dispatch(userCheckAuth())
     }, [dispatch])
+
+    if (isLoadingUser) return <div>Loading...</div>
 
     return (
         <div>
