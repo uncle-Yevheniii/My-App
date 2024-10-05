@@ -15,7 +15,7 @@ const userSlice = createSlice({
         builder.addCase(userSignUp.fulfilled, (state, action) => {
             state.isLoadingFetch = false
             console.log(action.payload) //TODO add state
-            state.user = action.payload.user
+            state.userInfo = action.payload.user
         })
         builder.addCase(userSignUp.rejected, (state, action) => {
             state.isLoadingFetch = false
@@ -29,8 +29,8 @@ const userSlice = createSlice({
         builder.addCase(userLogin.fulfilled, (state, action) => {
             state.isLoadingFetch = false
             console.log(action.payload) //TODO add state
-            state.user = action.payload.user
-            state.isLogged = true
+            state.userInfo = action.payload.user
+            state.isAuthenticated = true
         })
         builder.addCase(userLogin.rejected, (state, action) => {
             state.isLoadingFetch = false
@@ -44,8 +44,8 @@ const userSlice = createSlice({
         builder.addCase(userEmailVerify.fulfilled, (state, action) => {
             state.isLoadingFetch = false
             console.log(action.payload) //TODO add state
-            state.user = action.payload.user
-            state.isLogged = true
+            state.userInfo = action.payload.user
+            state.isAuthenticated = true
         })
         builder.addCase(userEmailVerify.rejected, (state, action) => {
             state.isLoadingFetch = false
@@ -58,11 +58,13 @@ const userSlice = createSlice({
         })
         builder.addCase(userCheckAuth.fulfilled, (state, action) => {
             state.isLoadingUser = false
-            console.table(action.payload)
+            state.isAuthenticated = true
+            state.userInfo = action.payload.user
         })
         builder.addCase(userCheckAuth.rejected, (state, action) => {
             state.isLoadingUser = false
-            console.log(action)
+            state.isAuthenticated = false
+            state.isErrorMsgFetch = typeof action.payload === 'string' ? action.payload : 'Something went wrong'
         })
     }
 })

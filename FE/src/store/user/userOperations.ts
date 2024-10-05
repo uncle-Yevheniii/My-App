@@ -3,6 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 
 import { IFormValues, IFormValue } from '@/models/IFormValues'
 
+axios.defaults.withCredentials = true
 const BASE_URI = 'http://localhost:8080/api/users'
 
 export const userSignUp = createAsyncThunk('user/signup', async (data: IFormValues, { rejectWithValue }) => {

@@ -12,7 +12,7 @@ export default async function login(req: Request, res: Response) {
 
         const user = await User.findOne({ email })
         if (!user) return res.status(400).json({ success: false, msg: 'Invalid email or password' })
-        if (!user.isVerified) return res.status(400).json({ success: false, msg: 'Please verify your email' })
+        // if (!user.isVerified) return res.status(400).json({ success: false, msg: 'Please verify your email' })
 
         const compareHash = await compareHashService(password, user.password)
         if (!compareHash) return res.status(400).json({ success: false, msg: 'Invalid email or password' })
