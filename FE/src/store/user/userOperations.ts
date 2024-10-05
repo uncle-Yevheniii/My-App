@@ -45,3 +45,13 @@ export const userCheckAuth = createAsyncThunk('user/checkAuth', async (_, { reje
         return rejectWithValue('An unexpected error occurred')
     }
 })
+
+export const userLogOut = createAsyncThunk('user/logout', async (_, { rejectWithValue }) => {
+    try {
+        const res = await axios.get(`${BASE_URI}/logout`)
+        return res.data
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) return rejectWithValue(error.response?.data?.msg || 'An error occurred')
+        return rejectWithValue('An unexpected error occurred')
+    }
+})
