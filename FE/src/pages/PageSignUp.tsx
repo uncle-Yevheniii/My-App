@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { Mail, Lock, User, Loader } from 'lucide-react'
-import { Formik, Form, FormikHelpers, ErrorMessage } from 'formik'
+import { Formik, Form, FormikHelpers } from 'formik'
 
 import { schema } from '@/helpers'
 import { Input } from '@/components'
@@ -28,22 +28,27 @@ export default function SignUpPage() {
     }
 
     return (
-        <div>
-            <h2>Create Account</h2>
+        <div className="form-container">
+            <h2 className="text-3xl font-bold mb-6 text-center">Create Account</h2>
+
             <Formik initialValues={initialValueSignUp} onSubmit={handleSubmit} validationSchema={schema.signUp}>
-                <Form>
+                <Form className="relative">
                     <Input className="border" icon={User} id="name" name="name" type="text" placeholder="Enter your Name" />
-                    <ErrorMessage name="name" render={(msg) => <div className="text-red-500">{msg}</div>} />
 
                     <Input className="border" icon={Mail} id="email" name="email" type="text" placeholder="Enter your Email" />
-                    <ErrorMessage name="email" render={(msg) => <div className="text-red-500">{msg}</div>} />
 
                     <Input className="border" icon={Lock} id="password" name="password" type="text" placeholder="Enter your Password" />
-                    <ErrorMessage name="password" render={(msg) => <div className="text-red-500">{msg}</div>} />
 
                     {errorMessage && <div className="error-message">{errorMessage}</div>}
 
-                    <button type="submit" disabled={isLoading}>
+                    <button
+                        type="submit"
+                        disabled={isLoading}
+                        className="mt-2 w-full p-4 text-primary bg-secondary bg-opacity-50 font-bold rounded-2xl transition duration-200
+                        
+                        hover:from-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2
+                        focus:ring-offset-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
                         {isLoading ? <Loader className=" animate-spin mx-auto" size={24} /> : 'Sign Up'}
                     </button>
                 </Form>

@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    body {
+        @apply text-text bg-background;
+    }
+}
+
+@layer components {
+    .form-container {
+        @apply max-w-2xl w-full backdrop-filter p-8;
+    }
+}

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
-import { Layout } from './Layout'
+import { Layout } from './ui/Layout'
 
 import { SignUpPage, LoginPage, EmailVerifyPage, DashboardPage, AboutProjectPage } from '@/pages'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
@@ -38,7 +38,7 @@ export default function App() {
     if (isLoadingUser) return <div>Loading...</div>
 
     return (
-        <div>
+        <div className="min-h-screen flex flex-col justify-center items-center relative overflow-hidden">
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<AboutProjectPage />} />
