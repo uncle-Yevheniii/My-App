@@ -1,6 +1,7 @@
+import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
-import { RectangleEllipsis, Loader } from 'lucide-react'
 import { Formik, Form, FormikHelpers } from 'formik'
+import { RectangleEllipsis, Loader } from 'lucide-react'
 
 import { schema } from '@/helpers'
 import { Input } from '@/components'
@@ -15,15 +16,22 @@ export default function EmailVerifyPage() {
     const errorMessage = useAppSelector((state) => state.user.isErrorMsgFetch)
 
     const handleSubmit = async (values: { token: string }, { resetForm }: FormikHelpers<{ token: string }>) => {
-        try {
-            await dispatch(userEmailVerify(values)).unwrap()
-            navigate('/dashboard')
-        } catch (error) {
-            console.error('Email verify error:', error)
-            // TODO Handle error (e.g., show error message console.log(err) or toast
-        } finally {
-            resetForm()
-        }
+        toast.promise(
+            dispatch(userEmailVerify(values))
+                .unwrap()
+                .finally(() => resetForm()),
+            {
+                loading: 'Logging in...',
+                success: () => {
+                    navigate('/dashboard')
+                    return 'Login successful'
+                },
+                error: (error) => {
+                    console.error('Login error:', error)
+                    return 'Login failed'
+                }
+            }
+        )
     }
     return (
         <div className="form-container">

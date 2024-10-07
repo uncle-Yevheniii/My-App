@@ -1,12 +1,14 @@
 import { formatDate } from '@/helpers'
 import { userLogOut } from '@/store/user/userOperations'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import toast from 'react-hot-toast'
 
 export default function DashboardPage() {
     const dispatch = useAppDispatch()
     const user = useAppSelector((state) => state.user.userInfo)
 
-    const handleLogout = () => dispatch(userLogOut())
+    const handleLogout = () =>
+        toast.promise(dispatch(userLogOut()), { loading: 'Logging out...', success: 'Logged out successfully', error: 'Failed to log out' })
 
     return (
         <section className="form-container">

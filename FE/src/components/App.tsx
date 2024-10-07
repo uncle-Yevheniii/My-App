@@ -1,31 +1,13 @@
 import { useEffect } from 'react'
+import { Toaster } from 'react-hot-toast'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { Layout } from './ui/Layout'
-
-import { SignUpPage, LoginPage, EmailVerifyPage, DashboardPage, AboutProjectPage } from '@/pages'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { Loader } from './ui/Loader'
+import { ProtectRoute, RedirectRoute } from '@/helpers'
 import { userCheckAuth } from '@/store/user/userOperations'
-
-//redirect function authenticated user to dashboard page
-function RedirectUser({ children }: { children: JSX.Element }) {
-    const user = useAppSelector((state) => state.user.userInfo)
-    const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated)
-
-    if (isAuthenticated && user?.isVerified) return <Navigate to="/dashboard" replace />
-    return children
-}
-
-//protect function not-authenticated user to dashboard page
-function ProtectRoute({ children }: { children: JSX.Element }) {
-    const user = useAppSelector((state) => state.user.userInfo)
-    const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated)
-
-    if (!isAuthenticated) return <Navigate to="/login" replace />
-    if (!user?.isVerified) return <Navigate to="/email-verify" replace />
-
-    return children
-}
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { SignUpPage, LoginPage, EmailVerifyPage, DashboardPage, AboutProjectPage } from '@/pages'
 
 export default function App() {
     const dispatch = useAppDispatch()
@@ -35,15 +17,15 @@ export default function App() {
         dispatch(userCheckAuth())
     }, [dispatch])
 
-    if (isLoadingUser) return <div>Loading...</div>
+    if (isLoadingUser) return <Loader />
 
     return (
         <div className="min-h-screen flex flex-col justify-center items-center relative overflow-hidden">
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<AboutProjectPage />} />
-                    <Route path="/signup" element={<RedirectUser children={<SignUpPage />} />} />
-                    <Route path="/login" element={<RedirectUser children={<LoginPage />} />} />
+                    <Route path="/signup" element={<RedirectRoute children={<SignUpPage />} />} />
+                    <Route path="/login" element={<RedirectRoute children={<LoginPage />} />} />
 
                     <Route path="/email-verify" element={<EmailVerifyPage />} />
 
@@ -52,6 +34,8 @@ export default function App() {
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Route>
             </Routes>
+
+            <Toaster />
         </div>
     )
 }

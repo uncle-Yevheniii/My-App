@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { Mail, Lock, Loader } from 'lucide-react'
 import { Formik, Form, FormikHelpers } from 'formik'
@@ -15,16 +16,23 @@ export default function SignUpPage() {
     const isLoading = useAppSelector((state) => state.user.isLoadingFetch)
     const errorMessage = useAppSelector((state) => state.user.isErrorMsgFetch)
 
-    const handleSubmit = async (values: IFormValue, { resetForm }: FormikHelpers<IFormValue>) => {
-        try {
-            await dispatch(userLogin(values)).unwrap()
-            navigate('/dashboard')
-        } catch (error) {
-            console.error('Login error:', error)
-            // TODO Handle error (e.g., show error message console.log(err) or toast
-        } finally {
-            resetForm()
-        }
+    const handleSubmit = (values: IFormValue, { resetForm }: FormikHelpers<IFormValue>) => {
+        toast.promise(
+            dispatch(userLogin(values))
+                .unwrap()
+                .finally(() => resetForm()),
+            {
+                loading: 'Logging in...',
+                success: () => {
+                    navigate('/dashboard')
+                    return 'Login successful'
+                },
+                error: (error) => {
+                    console.error('Login error:', error)
+                    return 'Login failed'
+                }
+            }
+        )
     }
 
     return (
@@ -37,7 +45,7 @@ export default function SignUpPage() {
 
                     <Input className="border" id="password" name="password" type="text" placeholder="Enter your Password" icon={Lock} />
 
-                    {errorMessage && <div className="">{errorMessage}</div>}
+                    {errorMessage && <div className="text-center text-primary font-bold">{errorMessage}</div>}
 
                     <button type="submit" disabled={isLoading} className="btn">
                         {isLoading ? <Loader className=" animate-spin mx-auto" size={24} /> : 'Login'}

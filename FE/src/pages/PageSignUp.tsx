@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { Mail, Lock, User, Loader } from 'lucide-react'
 import { Formik, Form, FormikHelpers } from 'formik'
@@ -16,15 +17,22 @@ export default function SignUpPage() {
     const errorMessage = useAppSelector((state) => state.user.isErrorMsgFetch)
 
     const handleSubmit = async (values: IFormValues, { resetForm }: FormikHelpers<IFormValues>) => {
-        try {
-            await dispatch(userSignUp(values)).unwrap()
-            navigate('/email-verify')
-        } catch (error) {
-            console.error('Sign up error:', error)
-            // TODO Handle error (e.g., show error message to user) or toast
-        } finally {
-            resetForm()
-        }
+        toast.promise(
+            dispatch(userSignUp(values))
+                .unwrap()
+                .finally(() => resetForm()),
+            {
+                loading: 'Logging in...',
+                success: () => {
+                    navigate('/dashboard')
+                    return 'Login successful'
+                },
+                error: (error) => {
+                    console.error('Login error:', error)
+                    return 'Login failed'
+                }
+            }
+        )
     }
 
     return (
@@ -39,7 +47,7 @@ export default function SignUpPage() {
 
                     <Input className="border" icon={Lock} id="password" name="password" type="text" placeholder="Enter your Password" />
 
-                    {errorMessage && <div className="">{errorMessage}</div>}
+                    {errorMessage && <div className="text-center text-primary font-bold">{errorMessage}</div>}
 
                     <button
                         type="submit"

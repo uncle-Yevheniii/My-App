@@ -6,7 +6,11 @@ import { initialState } from '@/models/IUser'
 const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        clearError: (state) => {
+            state.isErrorMsgFetch = ''
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(userSignUp.pending, (state) => {
             state.isLoadingFetch = true
