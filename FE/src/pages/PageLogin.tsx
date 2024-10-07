@@ -43,7 +43,7 @@ export default function SignUpPage() {
                 <Form>
                     <Input className="border" id="email" name="email" type="text" placeholder="Enter your Email" icon={Mail} />
 
-                    <Input className="border" id="password" name="password" type="text" placeholder="Enter your Password" icon={Lock} />
+                    <Input className="border" id="password" name="password" type="password" placeholder="Enter your Password" icon={Lock} />
 
                     {errorMessage && <div className="text-center text-primary font-bold">{errorMessage}</div>}
 

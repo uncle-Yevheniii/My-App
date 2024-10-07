@@ -1,10 +1,14 @@
+import { useState } from 'react'
 import { ErrorMessage, Field } from 'formik'
+import { PwdBtn } from './PasswordButton'
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
 }
 
 export default function Input({ icon: Icon, ...props }: InputProps) {
+    const [check, setCheck] = useState<boolean>(false)
+
     return (
         <div className="relative mb-7">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -13,6 +17,7 @@ export default function Input({ icon: Icon, ...props }: InputProps) {
 
             <Field
                 {...props}
+                type={check ? 'text' : props.type}
                 className="w-full pl-12 pr-4 py-2 text-text bg-background rounded-xl border transition duration-200
                 
                 border-b-primary border-x-background border-t-background 
@@ -24,6 +29,8 @@ export default function Input({ icon: Icon, ...props }: InputProps) {
                 name={props.name as string}
                 render={(msg) => <div className="absolute bottom-[-1.5rem] left-4 text-sm text-primary italic tracking-[-0.06rem]">{msg}</div>}
             />
+
+            {props.type === 'password' && <PwdBtn setCheck={setCheck} check={check} />}
         </div>
     )
 }

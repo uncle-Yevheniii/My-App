@@ -1,4 +1,5 @@
 import toast from 'react-hot-toast'
+
 import { useNavigate } from 'react-router-dom'
 import { Mail, Lock, User, Loader } from 'lucide-react'
 import { Formik, Form, FormikHelpers } from 'formik'
@@ -45,7 +46,7 @@ export default function SignUpPage() {
 
                     <Input className="border" icon={Mail} id="email" name="email" type="text" placeholder="Enter your Email" />
 
-                    <Input className="border" icon={Lock} id="password" name="password" type="text" placeholder="Enter your Password" />
+                    <Input className="border" icon={Lock} id="password" name="password" type="password" placeholder="Enter your Password" />
 
                     {errorMessage && <div className="text-center text-primary font-bold">{errorMessage}</div>}
 
