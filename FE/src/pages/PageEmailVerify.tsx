@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { RectangleEllipsis, Loader } from 'lucide-react'
-import { Formik, Form, ErrorMessage, FormikHelpers } from 'formik'
+import { Formik, Form, FormikHelpers } from 'formik'
 
 import { schema } from '@/helpers'
 import { Input } from '@/components'
@@ -26,16 +26,15 @@ export default function EmailVerifyPage() {
         }
     }
     return (
-        <div>
-            <h2>Verify Your Email</h2>
+        <div className="form-container">
+            <h2 className="title-text">Verify Your Email</h2>
             <Formik initialValues={{ token: '' }} onSubmit={handleSubmit} validationSchema={schema.emailVerify}>
-                <Form>
+                <Form autoComplete="off">
                     <Input className="border" id="token" type="text" name="token" placeholder="Enter your token" icon={RectangleEllipsis} />
-                    <ErrorMessage name="token" render={(msg) => <div className="text-red-500">{msg}</div>} />
 
                     {errorMessage && <div className="error">{errorMessage}</div>}
 
-                    <button type="submit" disabled={isLoading}>
+                    <button type="submit" disabled={isLoading} className="btn">
                         {isLoading ? <Loader className=" animate-spin mx-auto" size={24} /> : 'Email verify'}
                     </button>
                 </Form>

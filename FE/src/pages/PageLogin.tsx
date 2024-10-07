@@ -28,8 +28,8 @@ export default function SignUpPage() {
     }
 
     return (
-        <div className="form-container">
-            <h2 className="text-3xl font-bold mb-6 text-center">Welcome back</h2>
+        <section className="form-container">
+            <h2 className="title-text">Welcome back</h2>
 
             <Formik initialValues={initialValueLogin} onSubmit={handleSubmit} validationSchema={schema.logIn}>
                 <Form>
@@ -37,20 +37,13 @@ export default function SignUpPage() {
 
                     <Input className="border" id="password" name="password" type="text" placeholder="Enter your Password" icon={Lock} />
 
-                    {errorMessage && <div className="error">{errorMessage}</div>}
+                    {errorMessage && <div className="">{errorMessage}</div>}
 
-                    <button
-                        type="submit"
-                        disabled={isLoading}
-                        className="mt-2 w-full p-4 text-primary bg-secondary bg-opacity-50 font-bold rounded-2xl transition duration-200
-                        
-                        hover:from-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2
-                        focus:ring-offset-primary disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
+                    <button type="submit" disabled={isLoading} className="btn">
                         {isLoading ? <Loader className=" animate-spin mx-auto" size={24} /> : 'Login'}
                     </button>
                 </Form>
             </Formik>
-        </div>
+        </section>
     )
 }

@@ -28,8 +28,8 @@ export default function SignUpPage() {
     }
 
     return (
-        <div className="form-container">
-            <h2 className="text-3xl font-bold mb-6 text-center">Create Account</h2>
+        <section className="form-container">
+            <h2 className="title-text">Create Account</h2>
 
             <Formik initialValues={initialValueSignUp} onSubmit={handleSubmit} validationSchema={schema.signUp}>
                 <Form className="relative">
@@ -39,7 +39,7 @@ export default function SignUpPage() {
 
                     <Input className="border" icon={Lock} id="password" name="password" type="text" placeholder="Enter your Password" />
 
-                    {errorMessage && <div className="error-message">{errorMessage}</div>}
+                    {errorMessage && <div className="">{errorMessage}</div>}
 
                     <button
                         type="submit"
@@ -53,6 +53,6 @@ export default function SignUpPage() {
                     </button>
                 </Form>
             </Formik>
-        </div>
+        </section>
     )
 }
