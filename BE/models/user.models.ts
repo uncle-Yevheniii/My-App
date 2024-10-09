@@ -4,6 +4,9 @@ export interface IUser {
     email: string
     password: string
     name: string
+
+    avatar: string
+
     lastLogin: Date
     isVerified: boolean
     resetPasswordToken: string | undefined
@@ -23,6 +26,9 @@ const UserSchema: Schema = new Schema(
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
         name: { type: String, required: true },
+
+        avatar: { type: String, default: '' },
+
         lastLogin: { type: Date, default: Date.now },
         isVerified: { type: Boolean, default: false },
         resetPasswordToken: String,

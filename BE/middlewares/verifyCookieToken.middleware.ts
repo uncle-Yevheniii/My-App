@@ -28,9 +28,10 @@ export async function verifyCookieToken(req: Request, res: Response, next: NextF
     try {
         const token = req.cookies.token
         if (token) {
-            const decoded = verifyToken(res, token)
+            const decoded = verifyToken(token)
             if (!decoded) return res.status(401).json({ success: false, msg: 'Unauthorized - invalid token' })
-            req.body = decoded
+
+            req.decoded = decoded
             return next()
         }
 

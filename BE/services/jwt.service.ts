@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import type { Response } from 'express'
 
+import type { DecodedToken } from 'types/decoded'
 import type { IUserModel } from '#models/user.models'
 
 export function createTokenAndSetCookie(res: Response, user: IUserModel) {
@@ -16,11 +17,10 @@ export function createTokenAndSetCookie(res: Response, user: IUserModel) {
     })
 }
 
-export function verifyToken(res: Response, token: string) {
+export function verifyToken(token: string) {
     const JWT_SECRET = process.env.JWT_SECRET ? process.env.JWT_SECRET : ''
 
-    const decoded = jwt.verify(token, JWT_SECRET) as IUserModel
-    if (!decoded) return res.status(401).json({ success: false, msg: 'Unauthorized - invalid token' })
+    const decoded = jwt.verify(token, JWT_SECRET) as DecodedToken
 
     return decoded
 }

@@ -5,7 +5,11 @@ import { Logger } from '#helpers/logger'
 
 export default async function checkAuth(req: Request, res: Response) {
     try {
-        const { _id } = req.body
+        if (!req.decoded) {
+            return res.status(401).json({ success: false, msg: 'Unauthorized - token missing' })
+        }
+
+        const { _id } = req.decoded
 
         const user = await User.findById(_id)
         if (!user) return res.status(400).json({ success: false, msg: 'User not found' })

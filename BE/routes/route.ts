@@ -4,5 +4,7 @@ export enum Routes {
     LOGIN = '/login',
     LOGOUT = '/logout',
 
-    CHECK_AUTH = '/check-auth'
+    CHECK_AUTH = '/check-auth',
+
+    UPDATE = '/update'
 }
