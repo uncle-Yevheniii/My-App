@@ -1,12 +1,15 @@
-import { formatDate } from '@/helpers'
-import { userLogOut, userUpdateAvatar } from '@/store/user/userOperations'
-import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import toast from 'react-hot-toast'
+
 import { useRef } from 'react'
+
+import { formatDate } from '@/helpers'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { userLogOut, userUpdateAvatar } from '@/store/user/userOperations'
+import { UserBasedAvatar } from '@/components'
 
 export default function DashboardPage() {
     const dispatch = useAppDispatch()
-    const user = useAppSelector((state) => state.user.userInfo) // Використовуємо аватар з глобального стану
+    const user = useAppSelector((state) => state.user.userInfo)
     const fileInputRef = useRef<HTMLInputElement | null>(null)
 
     const handleLogout = () =>
@@ -16,25 +19,20 @@ export default function DashboardPage() {
             error: 'Failed to log out'
         })
 
-    // Функція для обробки завантаження файлу
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
         if (file) {
-            toast.promise(
-                dispatch(userUpdateAvatar(file)).unwrap(), // Викликаємо action для оновлення аватару
-                {
-                    loading: 'Updating avatar...',
-                    success: 'Avatar updated successfully!',
-                    error: 'Failed to update avatar'
-                }
-            )
+            toast.promise(dispatch(userUpdateAvatar(file)).unwrap(), {
+                loading: 'Updating avatar...',
+                success: 'Avatar updated successfully!',
+                error: 'Failed to update avatar'
+            })
         }
     }
 
-    // Функція для відкриття вікна вибору файлу
     const handleAvatarClick = () => {
         if (fileInputRef.current) {
-            fileInputRef.current.click() // Емулюємо клік на прихований інпут
+            fileInputRef.current.click()
         }
     }
 
@@ -45,14 +43,13 @@ export default function DashboardPage() {
             <div className="bg-secondary p-8 rounded-2xl mb-5">
                 <h3 className="title-text text-xl text-background">Profile Information</h3>
 
-                <div className="">
-                    {/* Використовуємо аватар безпосередньо з глобального стану */}
-                    <img
-                        src={user?.avatar} // Отримуємо новий аватар з Redux
-                        alt="avatar"
-                        onClick={handleAvatarClick}
-                        className="cursor-pointer"
-                    />
+                <div className=" mb-2 rounded-md overflow-hidden flex justify-center align-center">
+                    {user?.avatar !== '' ? (
+                        <img src={user?.avatar} alt="avatar" onClick={handleAvatarClick} className="cursor-pointer" />
+                    ) : (
+                        <UserBasedAvatar onClick={handleAvatarClick} />
+                    )}
+
                     <input type="file" ref={fileInputRef} style={{ display: 'none' }} accept="image/*" onChange={handleFileChange} />
                 </div>
 
