@@ -2,6 +2,9 @@ export interface IUser {
     _id: string
     email: string
     name: string
+
+    avatar: string
+
     isVerified: boolean
     verificationToken: string
     verificationTokenExpiresAt: Date | number

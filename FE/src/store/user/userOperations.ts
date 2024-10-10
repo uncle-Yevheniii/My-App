@@ -55,3 +55,20 @@ export const userLogOut = createAsyncThunk('user/logout', async (_, { rejectWith
         return rejectWithValue('An unexpected error occurred')
     }
 })
+
+export const userUpdateAvatar = createAsyncThunk('user/updateAvatar', async (file: File, { rejectWithValue }) => {
+    try {
+        const formData = new FormData()
+        formData.append('avatar', file)
+
+        const res = await axios.patch(`${BASE_URI}/update`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        return res.data
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) return rejectWithValue(error.response?.data?.msg || 'An error occurred')
+        return rejectWithValue('An unexpected error occurred')
+    }
+})

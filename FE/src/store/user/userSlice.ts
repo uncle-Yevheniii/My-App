@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { userSignUp, userLogin, userEmailVerify, userCheckAuth, userLogOut } from './userOperations'
+import { userSignUp, userLogin, userEmailVerify, userCheckAuth, userLogOut, userUpdateAvatar } from './userOperations'
 
 import { initialState } from '@/models/IUser'
 
@@ -77,6 +77,19 @@ const userSlice = createSlice({
             state.isAuthenticated = false
         })
         builder.addCase(userLogOut.rejected, (state, action) => {
+            state.isLoadingFetch = false
+            state.isErrorMsgFetch = typeof action.payload === 'string' ? action.payload : 'Something went wrong'
+        })
+
+        builder.addCase(userUpdateAvatar.pending, (state) => {
+            state.isLoadingFetch = true
+            state.isErrorMsgFetch = ''
+        })
+        builder.addCase(userUpdateAvatar.fulfilled, (state, action) => {
+            state.isLoadingFetch = false
+            state.userInfo = action.payload.user // Оновлюємо глобальний стан з оновленими даними
+        })
+        builder.addCase(userUpdateAvatar.rejected, (state, action) => {
             state.isLoadingFetch = false
             state.isErrorMsgFetch = typeof action.payload === 'string' ? action.payload : 'Something went wrong'
         })

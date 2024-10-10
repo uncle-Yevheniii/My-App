@@ -23,7 +23,7 @@ export default async function update(req: Request, res: Response) {
         const avatar = await avatarUpload(buffer, _id)
         if (!avatar) return res.status(500).json({ success: false, msg: 'Failed to upload avatar' })
 
-        const user = await User.findByIdAndUpdate(_id, { avatar })
+        const user = await User.findByIdAndUpdate(_id, { avatar }, { new: true })
         if (!user) return res.status(404).json({ success: false, msg: 'User not found' })
 
         res.status(200).json({ success: true, msg: 'Avatar updated successfully', user })
