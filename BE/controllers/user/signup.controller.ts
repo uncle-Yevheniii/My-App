@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import nodemailer from 'nodemailer'
 
 import type { Response, Request } from 'express'
 
@@ -32,8 +33,8 @@ export default async function signup(req: Request, res: Response) {
 
         createTokenAndSetCookie(res, user)
 
-        //! send verification email
-        Logger.warn(`Verification token: ${verificationToken})}`)
+        //TODO EMAIL sending
+        Logger.warn(`Verification token: ${verificationToken}`)
 
         return res.status(201).json({
             success: true,

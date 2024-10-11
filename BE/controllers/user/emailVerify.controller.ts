@@ -18,8 +18,8 @@ export default async function emailVerify(req: Request, res: Response) {
 
         await user.save()
 
-        //! send welcome email
-        Logger.warn(`Email sent: ${JSON.stringify(user)}`)
+        //TODO EMAIL sending welcome email
+        Logger.warn(`Hello, : ${user.name}!`)
 
         res.status(200).json({
             success: true,
