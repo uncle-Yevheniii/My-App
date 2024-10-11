@@ -40,7 +40,7 @@ export default function EmailVerifyPage() {
                 <Form autoComplete="off">
                     <Input className="border" id="token" type="text" name="token" placeholder="Enter your token" icon={RectangleEllipsis} />
 
-                    {errorMessage && <div className="error">{errorMessage}</div>}
+                    {errorMessage && <div className="text-center text-primary font-bold">{errorMessage}</div>}
 
                     <button type="submit" disabled={isLoading} className="btn">
                         {isLoading ? <Loader className=" animate-spin mx-auto" size={24} /> : 'Email verify'}
