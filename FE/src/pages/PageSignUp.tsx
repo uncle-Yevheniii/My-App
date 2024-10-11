@@ -25,12 +25,12 @@ export default function SignUpPage() {
             {
                 loading: 'Logging in...',
                 success: () => {
-                    navigate('/dashboard')
-                    return 'Login successful'
+                    navigate('/email-verify')
+                    return 'Account create is successfully'
                 },
                 error: (error) => {
-                    console.error('Login error:', error)
-                    return 'Login failed'
+                    console.error('Account create is failed:', error)
+                    return 'Account create is failed'
                 }
             }
         )

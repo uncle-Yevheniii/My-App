@@ -24,11 +24,11 @@ export default function EmailVerifyPage() {
                 loading: 'Logging in...',
                 success: () => {
                     navigate('/dashboard')
-                    return 'Login successful'
+                    return 'Email verify is successful'
                 },
                 error: (error) => {
-                    console.error('Login error:', error)
-                    return 'Login failed'
+                    console.error('Email verify is failed:', error)
+                    return 'Email verify is failed.'
                 }
             }
         )
