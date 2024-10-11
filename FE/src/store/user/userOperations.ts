@@ -4,7 +4,10 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import { IFormValues, IFormValue } from '@/models/IFormValues'
 
 axios.defaults.withCredentials = true
-const BASE_URI = 'http://localhost:8080/api/users'
+
+const DEV_API_URL = 'http://localhost:8080/api/users'
+const PROD_API_URL = process.env.PROD_API_URL || '/api/users'
+const BASE_URI = import.meta.env.MODE === 'development' ? DEV_API_URL : PROD_API_URL
 
 export const userSignUp = createAsyncThunk('user/signup', async (data: IFormValues, { rejectWithValue }) => {
     try {
